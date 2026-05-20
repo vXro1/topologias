@@ -1,0 +1,2268 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="theme-color" content="#050816"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>NEOTOPIA — Topologías de Red Interactivas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/*========================================================
+  NEOTOPIA v5.0 — Enhanced Educational Platform
+  Mobile-first, fully responsive, premium particles
+========================================================*/
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050816;--bg2:#080e1e;--bg3:#0d1530;
+  --glass:rgba(8,14,30,0.82);--glass-border:rgba(255,255,255,0.07);
+  --blur:blur(20px);--ease:cubic-bezier(0.4,0,0.2,1);
+  --cyan:#00E5FF;--blue:#3B82F6;--pink:#FF4D8D;--orange:#FF7A00;
+  --magenta:#FF007A;--neon:#94fc17;--coral:#FF5E5B;--white:#FFFFFF;
+  --text1:rgba(255,255,255,0.92);--text2:rgba(255,255,255,0.68);
+  --text3:rgba(255,255,255,0.45);--text4:rgba(255,255,255,0.28);
+  --fh:'Orbitron',monospace;--fs:'Rajdhani',sans-serif;--fb:'Inter',sans-serif;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:24px;
+}
+html{height:100%;touch-action:pan-y}
+body{
+  background:var(--bg);color:var(--text1);font-family:var(--fb);
+  overflow-x:clip;min-height:100%;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+ul{list-style:none}a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+canvas{display:block}img{max-width:100%;display:block}
+button,a,[role="button"],[tabindex]{touch-action:manipulation}
+
+/* ── Fixed backgrounds ── */
+#tsparticles{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:0;pointer-events:none;
+}
+#tsparticles canvas{
+  display:block;width:100%!important;height:100%!important;
+}
+.grid-overlay{
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,0.012) 1px,transparent 1px);
+  background-size:64px 64px;
+  z-index:0;pointer-events:none;
+}
+nav,section,footer,.topo-view{position:relative;z-index:1}
+
+/*========================================================
+  NAVBAR
+========================================================*/
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:0 clamp(1rem,3vw,1.5rem);
+  transition:background .35s var(--ease),border-color .35s var(--ease),box-shadow .35s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.navbar.scrolled{
+  background:rgba(5,8,22,0.96);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border-color:rgba(255,255,255,0.07);
+  box-shadow:0 4px 40px rgba(0,0,0,0.5);
+}
+.nav-container{
+  max-width:1320px;margin:0 auto;
+  height:68px;display:flex;align-items:center;gap:1.5rem;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:.65rem;
+  cursor:pointer;flex-shrink:0;user-select:none;
+}
+.logo-hex{width:32px;height:37px;flex-shrink:0}
+.logo-text-block{display:flex;flex-direction:column;line-height:1.05}
+.logo-main{
+  font-family:var(--fh);font-size:.82rem;font-weight:700;letter-spacing:.1em;
+  background:linear-gradient(90deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.logo-sub{font-family:var(--fs);font-size:.55rem;font-weight:500;letter-spacing:.28em;color:var(--text4)}
+.nav-menu{display:flex;align-items:center;gap:.1rem;margin-left:auto}
+.nav-link{
+  font-family:var(--fs);font-size:.875rem;font-weight:600;letter-spacing:.02em;color:var(--text3);
+  padding:.45rem .85rem;border-radius:var(--r-sm);
+  transition:color .25s,background .25s;position:relative;white-space:nowrap;
+}
+.nav-link::after{
+  content:'';position:absolute;bottom:1px;left:.85rem;right:.85rem;
+  height:1px;background:linear-gradient(90deg,var(--cyan),var(--blue));
+  transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);
+}
+.nav-link:hover{color:var(--white)}.nav-link:hover::after{transform:scaleX(1)}
+.nav-cta{
+  display:flex;align-items:center;gap:.45rem;flex-shrink:0;
+  padding:.52rem 1.15rem;border-radius:var(--r-sm);
+  background:var(--cyan);color:var(--bg);
+  font-family:var(--fs);font-size:.82rem;font-weight:700;letter-spacing:.04em;
+  box-shadow:0 0 20px rgba(0,229,255,.35);transition:all .3s var(--ease);
+}
+.nav-cta:hover{background:#33eeff;box-shadow:0 4px 30px rgba(0,229,255,.6);transform:translateY(-2px)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:6px;margin-left:auto;flex-shrink:0}
+.hamburger span{
+  display:block;width:22px;height:2px;
+  background:var(--white);border-radius:2px;transition:all .3s var(--ease);
+}
+.hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/*========================================================
+  HERO
+========================================================*/
+.hero{
+  min-height:100vh;min-height:100svh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(80px,12vw,100px) clamp(1rem,3vw,1.5rem) clamp(3rem,6vw,5rem);
+  position:relative;overflow:hidden;
+}
+.hero-container{
+  max-width:1320px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(2rem,4vw,3rem);align-items:center;
+}
+.hero-left{display:flex;flex-direction:column;gap:clamp(1rem,2vw,1.5rem);z-index:2}
+.hero-label{
+  display:inline-flex;align-items:center;gap:.55rem;
+  font-family:var(--fh);font-size:.58rem;font-weight:600;letter-spacing:.22em;color:var(--cyan);
+}
+.label-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.5)}50%{box-shadow:0 0 0 5px rgba(0,229,255,0)}}
+.hero-title{display:flex;flex-direction:column;gap:.06rem;font-family:var(--fh);font-weight:800;line-height:1.05}
+.title-line{font-size:clamp(1.4rem,3.2vw,2.7rem);color:rgba(255,255,255,.9)}
+.title-accent{
+  font-size:clamp(1.7rem,4vw,3.4rem);
+  background:linear-gradient(90deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 22px rgba(0,229,255,.28));
+}
+.hero-sub{
+  font-size:clamp(.85rem,1.4vw,1.05rem);line-height:1.78;color:var(--text2);
+  max-width:480px;
+}
+.hero-actions{display:flex;gap:.85rem;align-items:center;flex-wrap:wrap}
+.btn-primary{
+  position:relative;overflow:hidden;
+  padding:clamp(.7rem,.8rem,.9rem) clamp(1.2rem,1.8rem,2rem);border-radius:var(--r-md);
+  background:var(--cyan);color:var(--bg);
+  font-family:var(--fs);font-size:clamp(.9rem,.97rem,1rem);font-weight:700;letter-spacing:.03em;
+  transition:all .3s var(--ease);box-shadow:0 0 28px rgba(0,229,255,.35);
+  min-height:48px;display:inline-flex;align-items:center;
+}
+.btn-glow{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.25),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.btn-primary:hover .btn-glow{opacity:1}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 36px rgba(0,229,255,.55);background:#33eeff}
+.btn-content{position:relative;display:flex;align-items:center;gap:.5rem}
+.btn-arrow{transition:transform .3s}.btn-primary:hover .btn-arrow{transform:translateX(5px)}
+.btn-ghost{
+  padding:clamp(.65rem,.8rem,.9rem) clamp(1.1rem,1.5rem,1.7rem);border-radius:var(--r-md);
+  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);
+  font-family:var(--fs);font-size:clamp(.9rem,.97rem,1rem);font-weight:600;
+  color:var(--text2);backdrop-filter:blur(8px);transition:all .3s var(--ease);min-height:48px;
+}
+.btn-ghost:hover{border-color:rgba(255,255,255,.28);color:var(--white);background:rgba(255,255,255,.08);transform:translateY(-2px)}
+.hero-features{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.hfeat{
+  display:flex;align-items:center;gap:.7rem;
+  font-family:var(--fs);font-size:.82rem;font-weight:600;
+  color:var(--text2);letter-spacing:.01em;
+}
+.hfeat-icon{
+  width:30px;height:30px;border-radius:var(--r-sm);flex-shrink:0;
+  border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.06);
+  display:flex;align-items:center;justify-content:center;color:var(--cyan);
+}
+.hfeat-icon svg{width:14px;height:14px}
+.hero-right{display:flex;align-items:center;justify-content:center;z-index:2}
+.hero-3d-wrap{
+  position:relative;width:min(520px,90vw);
+  aspect-ratio:1;
+}
+#heroCanvas3D{width:100%;height:100%;border-radius:var(--r-xl);pointer-events:none}
+
+/* Floating cards */
+.float-card{
+  position:absolute;display:flex;align-items:center;gap:.55rem;
+  background:rgba(8,14,30,.88);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-md);padding:.65rem .95rem;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  animation:float-anim 4s ease-in-out infinite;pointer-events:none;
+}
+.float-card.fc-tl{top:8%;left:-5%;animation-delay:0s}
+.float-card.fc-tr{top:18%;right:-8%;animation-delay:1.2s}
+.float-card.fc-br{bottom:22%;right:-10%;animation-delay:2.1s}
+.float-card.fc-bl{bottom:12%;left:-8%;animation-delay:.7s}
+@keyframes float-anim{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.fc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fc-title{font-family:var(--fh);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--white);white-space:nowrap}
+.fc-desc{font-size:.68rem;color:var(--text3);white-space:nowrap;margin-top:.1rem}
+
+/* Scroll indicator */
+.scroll-indicator{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--text4);font-family:var(--fh);font-size:.5rem;letter-spacing:.24em;pointer-events:none;
+}
+.scroll-mouse{width:20px;color:rgba(255,255,255,.3)}
+.scroll-wheel{animation:scroll-bounce 1.8s ease-in-out infinite}
+@keyframes scroll-bounce{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(6px);opacity:.4}}
+
+/* Hero stats bar — NEW */
+.hero-stats-bar{
+  display:flex;gap:1.5rem;padding-top:.5rem;flex-wrap:wrap;
+}
+.hero-stat{display:flex;flex-direction:column;gap:.15rem}
+.hero-stat-val{
+  font-family:var(--fh);font-size:1.4rem;font-weight:800;
+  background:linear-gradient(90deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-stat-lbl{font-family:var(--fs);font-size:.68rem;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase}
+
+/*========================================================
+  SHARED SECTION STYLES
+========================================================*/
+.section-wrap{max-width:1320px;margin:0 auto;padding:clamp(3rem,6vw,5rem) clamp(1rem,3vw,1.5rem)}
+.section-header{text-align:center;margin-bottom:clamp(2rem,4vw,3.5rem);display:flex;flex-direction:column;align-items:center;gap:.9rem}
+.section-tag{
+  display:inline-flex;align-items:center;gap:.45rem;
+  font-family:var(--fh);font-size:.58rem;font-weight:600;letter-spacing:.24em;color:var(--cyan);text-transform:uppercase;
+}
+.tag-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.section-title{
+  font-family:var(--fh);font-size:clamp(1.25rem,2.8vw,2.15rem);
+  font-weight:700;letter-spacing:-.01em;color:var(--white);line-height:1.2;
+}
+.section-sub{font-size:.93rem;color:var(--text3);max-width:540px;line-height:1.7}
+
+/*========================================================
+  INTRO SECTION — Animated stats
+========================================================*/
+.intro-section{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,4rem);align-items:center}
+.intro-left{display:flex;flex-direction:column;gap:1.3rem}
+.intro-left .section-header{text-align:left;align-items:flex-start;margin-bottom:0}
+.intro-lead{font-size:.95rem;line-height:1.82;color:var(--text2)}
+.intro-lead strong{color:var(--text1);font-weight:600}
+.intro-pills{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.5rem}
+.pill{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--fs);font-size:.76rem;font-weight:600;
+  padding:.3rem .8rem;border-radius:100px;
+  border:1px solid rgba(0,229,255,.25);background:rgba(0,229,255,.06);color:var(--cyan);
+}
+.intro-canvas-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:.8rem}
+#introCanvas{width:100%;height:auto;aspect-ratio:1/1;max-width:420px;border-radius:var(--r-lg)}
+.intro-canvas-label{font-family:var(--fs);font-size:.75rem;font-weight:600;letter-spacing:.1em;color:var(--text4);text-align:center}
+
+/* Info boxes — NEW in intro */
+.intro-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1rem}
+.info-box{
+  padding:.85rem 1rem;border-radius:var(--r-md);
+  background:var(--glass);border:1px solid var(--glass-border);
+  backdrop-filter:var(--blur);display:flex;flex-direction:column;gap:.3rem;
+  transition:border-color .25s,transform .25s;
+}
+.info-box:hover{border-color:rgba(255,255,255,.15);transform:translateY(-3px)}
+.info-box-val{font-family:var(--fh);font-size:1.1rem;font-weight:800;background:linear-gradient(90deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.info-box-lbl{font-family:var(--fs);font-size:.7rem;font-weight:600;color:var(--text3);letter-spacing:.06em}
+
+/*========================================================
+  TOPOLOGIES GRID
+========================================================*/
+.topologies{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.topo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.topo-card{
+  position:relative;border-radius:var(--r-lg);
+  cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+  outline:none;overflow:hidden;
+}
+.topo-card:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.topo-card:hover{transform:translateY(-6px)}
+.topo-card[data-type="estrella"]:hover{box-shadow:0 20px 60px rgba(255,77,141,.25)}
+.topo-card[data-type="bus"]:hover{box-shadow:0 20px 60px rgba(0,229,255,.2)}
+.topo-card[data-type="anillo"]:hover{box-shadow:0 20px 60px rgba(255,0,122,.25)}
+.topo-card[data-type="arbol"]:hover{box-shadow:0 20px 60px rgba(59,130,246,.25)}
+.topo-card[data-type="malla"]:hover{box-shadow:0 20px 60px rgba(255,122,0,.25)}
+.topo-card[data-type="hibrida"]:hover{box-shadow:0 20px 60px rgba(0,229,255,.2)}
+.topo-card-glow{position:absolute;inset:0;opacity:0;transition:opacity .4s;pointer-events:none}
+.topo-card:hover .topo-card-glow{opacity:1}
+.topo-card[data-type="estrella"] .topo-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(255,77,141,.14) 0%,transparent 70%)}
+.topo-card[data-type="bus"] .topo-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(0,229,255,.12) 0%,transparent 70%)}
+.topo-card[data-type="anillo"] .topo-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(255,0,122,.14) 0%,transparent 70%)}
+.topo-card[data-type="arbol"] .topo-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(59,130,246,.14) 0%,transparent 70%)}
+.topo-card[data-type="malla"] .topo-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(255,122,0,.14) 0%,transparent 70%)}
+.topo-card[data-type="hibrida"] .topo-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(0,229,255,.12) 0%,transparent 70%)}
+.topo-card-body{
+  height:100%;display:flex;flex-direction:column;
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--r-lg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  transition:border-color .35s;
+}
+.topo-card:hover .topo-card-body{border-color:rgba(255,255,255,.14)}
+.topo-card-visual{
+  background:rgba(0,0,0,.3);border-radius:var(--r-lg) var(--r-lg) 0 0;
+  overflow:hidden;padding:.5rem;display:flex;align-items:center;justify-content:center;
+}
+.mini-canvas{
+  border-radius:var(--r-sm);display:block;width:100%;height:auto;
+  aspect-ratio:120/100;max-height:130px;
+}
+.topo-card-content{padding:clamp(.75rem,2vw,1rem) clamp(.85rem,2vw,1.15rem);flex:1;display:flex;flex-direction:column;gap:.7rem}
+.topo-card-header{display:flex;align-items:center;gap:.65rem}
+.topo-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.topo-card-name{font-family:var(--fh);font-size:clamp(.8rem,.92rem,1rem);font-weight:700;color:var(--white);letter-spacing:.03em}
+.topo-card-desc{font-size:.8rem;line-height:1.65;color:var(--text2);flex:1}
+.topo-card-section{display:flex;flex-direction:column;gap:.35rem}
+.tcs-label{font-family:var(--fs);font-size:.7rem;font-weight:700;letter-spacing:.06em}
+.tcs-list{display:flex;flex-direction:column;gap:.18rem;padding-left:.2rem}
+.tcs-list li{font-size:.75rem;color:var(--text3);line-height:1.5;padding-left:.85rem;position:relative}
+.tcs-list li::before{content:'';position:absolute;left:0;top:.55em;width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5}
+.topo-card-footer{
+  padding:.7rem clamp(.85rem,2vw,1.15rem);border-top:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+}
+.topo-chips{display:flex;gap:.35rem;flex-wrap:wrap}
+.chip{font-family:var(--fs);font-size:.66rem;font-weight:700;letter-spacing:.04em;padding:.18rem .55rem;border-radius:4px;border:1px solid}
+.topo-cta{
+  display:flex;align-items:center;gap:.3rem;
+  font-family:var(--fs);font-size:.75rem;font-weight:700;
+  color:var(--text3);letter-spacing:.04em;flex-shrink:0;transition:color .25s;
+}
+.topo-cta svg{transition:transform .25s}
+.topo-card:hover .topo-cta{color:var(--white)}
+.topo-card:hover .topo-cta svg{transform:translateX(4px)}
+
+/*========================================================
+  FEATURES SECTION
+========================================================*/
+.features-section{background:var(--bg2);position:relative}
+.features-section::before,.features-section::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.15),transparent)}
+.features-section::before{top:0}.features-section::after{bottom:0}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,4rem);align-items:start}
+.feat-header{text-align:left;align-items:flex-start}
+.feat-cards{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:2rem}
+.feat-card{
+  display:flex;align-items:flex-start;gap:.8rem;
+  padding:.95rem 1rem;border-radius:var(--r-md);
+  background:var(--glass);border:1px solid var(--glass-border);
+  backdrop-filter:var(--blur);transition:border-color .25s,transform .25s;
+}
+.feat-card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-3px)}
+.feat-card-icon{
+  width:36px;height:36px;border-radius:9px;border:1px solid;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s;
+}
+.feat-card:hover .feat-card-icon{transform:scale(1.08)}
+.feat-card-icon svg{width:16px;height:16px}
+.feat-card h4{font-family:var(--fh);font-size:.68rem;font-weight:700;letter-spacing:.06em;color:var(--white);margin-bottom:.2rem}
+.feat-card p{font-size:.74rem;line-height:1.55;color:var(--text2)}
+.app-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-top:2rem}
+.app-card{
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  padding:1rem .6rem;border-radius:var(--r-md);
+  background:var(--glass);border:1px solid var(--glass-border);
+  backdrop-filter:var(--blur);text-align:center;transition:border-color .25s,transform .25s;
+}
+.app-card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-3px)}
+.app-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+.app-icon svg{width:24px;height:24px}
+.app-name{font-family:var(--fh);font-size:.58rem;font-weight:700;letter-spacing:.08em;color:var(--white)}
+.app-desc{font-size:.66rem;color:var(--text3);line-height:1.4}
+
+/*========================================================
+  REDUNDANCY
+========================================================*/
+#redundancy{background:var(--bg)}
+.redundancy-layout{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.redundancy-canvas-wrap{
+  border-radius:var(--r-lg);overflow:hidden;
+  border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:var(--blur);
+}
+#redundancyCanvas{width:100%;height:auto;aspect-ratio:520/320;display:block}
+.redundancy-caption{padding:.7rem 1rem;font-size:.75rem;color:var(--text3);font-family:var(--fs)}
+.redundancy-table{display:flex;flex-direction:column}
+.red-table-header{
+  display:grid;grid-template-columns:1.5fr .65fr .85fr 1.3fr;gap:.5rem;padding:.6rem 1rem;
+  font-family:var(--fh);font-size:.54rem;font-weight:600;letter-spacing:.12em;color:var(--text3);
+  text-transform:uppercase;border-bottom:1px solid var(--glass-border);
+}
+.red-row{
+  display:grid;grid-template-columns:1.5fr .65fr .85fr 1.3fr;gap:.5rem;
+  padding:.7rem 1rem;align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.04);border-radius:var(--r-sm);transition:background .2s;
+}
+.red-row:hover{background:rgba(255,255,255,.028)}
+.red-topo{display:flex;align-items:center;gap:.55rem;font-family:var(--fh);font-size:.7rem;font-weight:700;color:var(--white)}
+.red-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.red-badge{display:inline-block;font-size:.58rem;font-weight:700;font-family:var(--fh);letter-spacing:.06em;padding:.12rem .38rem;border-radius:4px;border:1px solid}
+.red-badge.spof{color:#FF5E5B;border-color:rgba(255,94,91,.3);background:rgba(255,94,91,.08)}
+.red-badge.no-spof{color:#00E5FF;border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.08)}
+.red-badge.var{color:#FF7A00;border-color:rgba(255,122,0,.3);background:rgba(255,122,0,.08)}
+.red-level{font-size:.73rem;font-weight:600;font-family:var(--fs)}
+.red-fail{font-size:.7rem;color:var(--text2)}
+
+/*========================================================
+  COMPARATIVE
+========================================================*/
+.comparative{background:var(--bg2)}
+.compare-wrap{display:flex;flex-direction:column;gap:1.1rem}
+.compare-table-container{
+  overflow-x:auto;border-radius:var(--r-lg);
+  border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:var(--blur);
+  -webkit-overflow-scrolling:touch;
+}
+.compare-table{width:100%;border-collapse:collapse;min-width:640px}
+.compare-table thead{background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.07)}
+.compare-table th{
+  font-family:var(--fh);font-size:.55rem;font-weight:600;letter-spacing:.12em;color:var(--text3);
+  text-transform:uppercase;text-align:center;padding:.85rem 1rem;
+}
+.compare-table th.col-topo{text-align:left;min-width:160px}
+.th-inner{display:flex;align-items:center;justify-content:center;gap:.38rem}
+.compare-table tbody tr{border-bottom:1px solid rgba(255,255,255,.035);transition:background .2s;cursor:pointer}
+.compare-table tbody tr:last-child{border-bottom:none}
+.compare-table tbody tr:hover{background:rgba(255,255,255,.032)}
+.col-topo{padding:.8rem 1.2rem;text-align:left}
+.topo-name-cell{display:flex;align-items:center;gap:.7rem}
+.topo-cell-name{font-family:var(--fh);font-size:.74rem;font-weight:700;color:var(--white);letter-spacing:.03em;display:block}
+.topo-cell-meta{display:flex;align-items:center;gap:.45rem;margin-top:.18rem}
+.tbl-spof{font-family:var(--fh);font-size:.5rem;font-weight:700;letter-spacing:.08em;padding:.1rem .32rem;border-radius:3px;border:1px solid}
+.tbl-spof.yes{color:#FF5E5B;border-color:rgba(255,94,91,.35);background:rgba(255,94,91,.08)}
+.tbl-spof.no{color:#00E5FF;border-color:rgba(0,229,255,.35);background:rgba(0,229,255,.08)}
+.tbl-red{font-family:var(--fs);font-size:.66rem;font-weight:600}
+.score-cell{text-align:center;padding:.8rem 1rem;position:relative}
+.score-dots{display:flex;gap:4px;justify-content:center;align-items:center}
+.score-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.1)}
+.score-cell[data-tooltip]::after{
+  content:attr(data-tooltip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:rgba(5,8,22,.97);border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r-sm);padding:.35rem .65rem;
+  font-family:var(--fb);font-size:.7rem;color:var(--text2);
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;z-index:10;
+}
+.score-cell[data-tooltip]:hover::after{opacity:1}
+.compare-hint{display:flex;align-items:center;gap:.45rem;font-size:.75rem;color:var(--text2)}
+
+/*========================================================
+  CHOOSER
+========================================================*/
+.chooser{background:var(--bg)}
+.chooser-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.chooser-card{
+  display:flex;flex-direction:column;
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--r-lg);backdrop-filter:var(--blur);
+  overflow:hidden;transition:all .35s var(--ease);
+}
+.chooser-card:hover{border-color:rgba(255,255,255,.12);transform:translateY(-4px);box-shadow:0 16px 44px rgba(0,0,0,.4)}
+.chooser-top{padding:1.4rem 1.4rem 1rem;display:flex;align-items:flex-start;gap:1rem}
+.chooser-icon{
+  width:44px;height:44px;border-radius:var(--r-md);border:1px solid;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.chooser-icon svg{width:20px;height:20px}
+.chooser-top h3{font-family:var(--fh);font-size:clamp(.76rem,.82rem,.9rem);font-weight:700;color:var(--white);letter-spacing:.03em;margin-bottom:.35rem}
+.chooser-top p{font-size:.78rem;line-height:1.6;color:var(--text2)}
+.chooser-rec{display:flex;align-items:center;gap:.5rem;padding:.6rem 1.4rem;border-top:1px solid rgba(255,255,255,.06)}
+.rec-label{font-family:var(--fs);font-size:.68rem;font-weight:600;color:var(--text4)}
+.rec-val{font-family:var(--fh);font-size:.72rem;font-weight:700}
+.chooser-toggle{
+  width:100%;padding:.48rem 1.4rem;
+  font-family:var(--fs);font-size:.72rem;font-weight:600;color:var(--text3);
+  text-align:left;letter-spacing:.04em;border-top:1px solid rgba(255,255,255,.04);
+  transition:color .2s,background .2s;min-height:44px;
+}
+.chooser-toggle:hover{color:var(--white);background:rgba(255,255,255,.028)}
+.chooser-body{max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
+.chooser-body.open{max-height:280px}
+.chooser-body p{padding:.85rem 1.4rem 1rem;font-size:.78rem;line-height:1.68;color:var(--text2);border-top:1px solid rgba(255,255,255,.05)}
+.chooser-view-btn{
+  margin:0 1.4rem 1.2rem;padding:.48rem 1rem;border-radius:var(--r-sm);
+  font-family:var(--fs);font-size:.77rem;font-weight:700;letter-spacing:.04em;color:var(--white);
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+  transition:all .25s;text-align:center;min-height:44px;
+}
+.chooser-view-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22)}
+
+/*========================================================
+  KNOWLEDGE PANEL — NEW educational section
+========================================================*/
+.knowledge-section{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.knowledge-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+.knowledge-card{
+  padding:1.5rem;border-radius:var(--r-lg);
+  background:var(--glass);border:1px solid var(--glass-border);
+  backdrop-filter:var(--blur);transition:all .3s var(--ease);
+}
+.knowledge-card:hover{border-color:rgba(255,255,255,.14);transform:translateY(-4px)}
+.kc-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.kc-icon{
+  width:42px;height:42px;border-radius:var(--r-md);border:1px solid;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.kc-icon svg{width:20px;height:20px}
+.kc-title{font-family:var(--fh);font-size:.82rem;font-weight:700;color:var(--white);letter-spacing:.03em}
+.kc-sub{font-size:.72rem;color:var(--text3);margin-top:.15rem}
+.kc-body{font-size:.8rem;line-height:1.75;color:var(--text2)}
+.kc-formula{
+  margin-top:.85rem;padding:.75rem 1rem;border-radius:var(--r-sm);
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);
+  font-family:'Courier New',monospace;font-size:.82rem;color:var(--cyan);letter-spacing:.05em;
+}
+.kc-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.85rem}
+.kc-tag{
+  font-family:var(--fs);font-size:.68rem;font-weight:600;
+  padding:.2rem .6rem;border-radius:4px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);color:var(--text2);
+}
+
+/*========================================================
+  CTA BANNER
+========================================================*/
+.cta-section{background:var(--bg2)}
+.cta-banner{
+  display:flex;align-items:center;justify-content:space-between;gap:2.5rem;
+  padding:clamp(1.5rem,3vw,2.5rem) clamp(1.5rem,3vw,3rem);border-radius:var(--r-xl);
+  background:linear-gradient(135deg,rgba(0,229,255,.06) 0%,rgba(59,130,246,.06) 100%);
+  border:1px solid rgba(0,229,255,.15);
+}
+.cta-banner-left h2{font-family:var(--fh);font-size:clamp(1rem,2vw,1.5rem);font-weight:700;color:var(--white);margin-bottom:.6rem}
+.cta-banner-left p{font-size:.88rem;line-height:1.7;color:var(--text2);max-width:500px}
+.cta-btn{flex-shrink:0}
+
+/*========================================================
+  FOOTER
+========================================================*/
+.footer{background:var(--bg2);position:relative}
+.footer-top-line{height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.4),rgba(59,130,246,.4),transparent)}
+.footer-wrap{
+  max-width:1320px;margin:0 auto;padding:clamp(2rem,4vw,3.5rem) clamp(1rem,3vw,1.5rem) clamp(1.5rem,3vw,2.5rem);
+  display:grid;grid-template-columns:1.8fr 1fr 1fr 1.2fr;gap:2.5rem;
+}
+.footer-brand{display:flex;flex-direction:column;gap:1rem}
+.footer-logo{display:flex;align-items:center;gap:.6rem}
+.footer-logo .logo-hex{width:26px;height:30px}
+.footer-tagline{font-size:.8rem;line-height:1.65;color:var(--text4);max-width:280px}
+.footer-nav,.footer-resources,.footer-credits{display:flex;flex-direction:column;gap:.6rem}
+.footer-nav-title{font-family:var(--fh);font-size:.56rem;font-weight:600;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;margin-bottom:.25rem}
+.footer-nav a,.footer-resources a{font-size:.8rem;color:var(--text4);transition:color .2s}
+.footer-nav a:hover,.footer-resources a:hover{color:var(--white)}
+.footer-credits p{font-size:.76rem;color:var(--text4);line-height:1.55}
+.footer-bottom{
+  max-width:1320px;margin:0 auto;padding:1.2rem clamp(1rem,3vw,1.5rem);
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;
+  font-size:.74rem;color:var(--text4);flex-wrap:wrap;
+}
+.footer-hex{color:rgba(0,229,255,.45)}
+
+/*========================================================
+  TOPOLOGY FULL-PAGE VIEW
+========================================================*/
+.topo-view{
+  position:fixed;inset:0;z-index:500;background:var(--bg);
+  overflow-y:auto;overflow-x:hidden;
+  transform:translateY(100%);transition:transform .42s cubic-bezier(.25,.46,.45,.94);
+  scrollbar-width:thin;scrollbar-color:rgba(0,229,255,.25) transparent;
+  -webkit-overflow-scrolling:touch;
+}
+.topo-view::-webkit-scrollbar{width:4px}
+.topo-view::-webkit-scrollbar-thumb{background:rgba(0,229,255,.25);border-radius:2px}
+.topo-view.open{transform:translateY(0)}
+.view-topbar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:0 clamp(1rem,3vw,1.5rem);height:56px;
+  background:rgba(5,8,22,.96);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.view-back-btn{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:var(--fs);font-size:.82rem;font-weight:600;color:var(--text2);letter-spacing:.04em;
+  padding:.36rem .82rem;border-radius:var(--r-sm);
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
+  transition:all .2s;flex-shrink:0;min-height:40px;
+}
+.view-back-btn:hover{color:var(--white);border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
+.view-topbar-title{
+  font-family:var(--fh);font-size:.74rem;font-weight:700;letter-spacing:.08em;color:var(--white);
+  flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.view-topbar-right{display:flex;align-items:center;gap:.45rem;flex-shrink:0}
+.view-counter{font-family:var(--fh);font-size:.6rem;font-weight:600;color:var(--text3);letter-spacing:.1em}
+.view-nav-btn{
+  width:36px;height:36px;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,.1);color:var(--text2);
+  background:rgba(255,255,255,.04);transition:all .2s;
+}
+.view-nav-btn:hover{color:var(--white);border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.08)}
+.view-3d-section{
+  position:relative;width:100%;
+  height:clamp(240px,50vw,480px);
+  border-bottom:1px solid rgba(255,255,255,.06);overflow:hidden;
+}
+#view3DCanvas{width:100%;height:100%;display:block;cursor:grab}
+#view3DCanvas:active{cursor:grabbing}
+.view-3d-overlay{
+  position:absolute;bottom:0;left:0;right:0;padding:.65rem 1.5rem;
+  background:linear-gradient(to top,rgba(5,8,22,.85) 0%,transparent 100%);pointer-events:none;
+}
+.view-3d-hint{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:var(--fs);font-size:.72rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.04em;
+}
+.view-3d-glow{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:60%;height:180px;pointer-events:none;
+  background:radial-gradient(ellipse at center bottom,rgba(0,229,255,.12) 0%,transparent 70%);
+}
+.view-body{
+  max-width:1200px;margin:0 auto;
+  padding:clamp(1.2rem,3vw,2.5rem) clamp(1rem,3vw,1.5rem) 1rem;
+  display:grid;grid-template-columns:290px 1fr;gap:2.5rem;align-items:start;
+}
+.view-aside{display:flex;flex-direction:column;gap:1.1rem;position:sticky;top:74px}
+.v-card{
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--r-md);padding:1.15rem 1.3rem;backdrop-filter:var(--blur);
+  display:flex;flex-direction:column;gap:.8rem;
+}
+.v-card-title{font-family:var(--fh);font-size:.56rem;font-weight:700;letter-spacing:.18em;color:var(--text3);text-transform:uppercase}
+.v-stats-note{font-size:.67rem;color:var(--text4);margin-top:-.3rem}
+.v-stats-list{display:flex;flex-direction:column;gap:.5rem}
+.vstat{display:grid;grid-template-columns:80px 1fr 28px;gap:.5rem;align-items:center}
+.vstat-lbl{font-family:var(--fs);font-size:.68rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.vstat-track{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.vstat-bar{height:100%;width:0;border-radius:2px;background:var(--bc,var(--cyan));box-shadow:0 0 5px var(--bc,var(--cyan));transition:width .7s cubic-bezier(.4,0,.2,1)}
+.vstat-val{font-family:var(--fh);font-size:.58rem;font-weight:700;color:var(--text3);text-align:right}
+.v-qfacts-card{gap:0;padding:0;overflow:hidden}
+.v-qfact{padding:.9rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;gap:.2rem;transition:background .2s}
+.v-qfact:last-child{border-bottom:none}
+.v-qfact:hover{background:rgba(255,255,255,.02)}
+.v-qfact-head{display:flex;align-items:center;gap:.38rem;font-family:var(--fh);font-size:.48rem;font-weight:700;letter-spacing:.14em;color:var(--qc,var(--cyan));text-transform:uppercase}
+.v-qfact-head svg{color:var(--qc,var(--cyan));flex-shrink:0}
+.v-qfact-val{font-family:var(--fh);font-size:.72rem;font-weight:800}
+.v-qfact-desc{font-size:.7rem;line-height:1.5;color:var(--text2)}
+.view-text{display:flex;flex-direction:column;gap:1.7rem}
+.v-section{display:flex;flex-direction:column;gap:.8rem}
+.v-sec-title{
+  font-family:var(--fh);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mc,var(--cyan));
+  display:flex;align-items:center;gap:.48rem;
+}
+.v-sec-title::before{content:'';width:14px;height:1px;background:var(--mc,var(--cyan));box-shadow:0 0 5px var(--mc,var(--cyan))}
+.v-sec-p{font-size:.88rem;line-height:1.82;color:var(--text2)}
+.v-two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem}
+.v-pro-list,.v-con-list{display:flex;flex-direction:column;gap:.45rem}
+.v-pro-card,.v-con-card{
+  display:flex;align-items:flex-start;gap:.55rem;padding:.7rem;
+  border-radius:var(--r-sm);background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);transition:background .2s;
+}
+.v-pro-card:hover{background:rgba(255,255,255,.04)}
+.v-con-card:hover{background:rgba(255,94,91,.05)}
+.v-card-icon{width:15px;height:15px;flex-shrink:0;margin-top:1px}
+.v-con-ico{color:rgba(255,94,91,.75)}
+.v-card-icon svg{width:100%;height:100%}
+.v-pro-card strong,.v-con-card strong{display:block;font-family:var(--fs);font-size:.77rem;font-weight:700;color:var(--text1);margin-bottom:.12rem}
+.v-pro-card p,.v-con-card p{font-size:.73rem;line-height:1.5;color:var(--text2);margin:0}
+.v-std-tags,.v-app-tags{display:flex;flex-wrap:wrap;gap:.38rem}
+.v-std-tag{font-family:var(--fs);font-size:.72rem;font-weight:600;padding:.24rem .65rem;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.11);color:var(--text2);background:rgba(255,255,255,.035)}
+.v-app-tag{font-family:var(--fs);font-size:.72rem;font-weight:600;padding:.24rem .72rem;border:1px solid;border-radius:100px}
+.v-example-box{border:1px solid;border-radius:var(--r-md);padding:1.1rem 1.4rem}
+.v-ex-label{display:flex;align-items:center;gap:.38rem;font-family:var(--fh);font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.6rem}
+.view-bottom-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(1rem,2vw,1.5rem);max-width:1200px;margin:0 auto;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.vbnav-btn{
+  display:flex;align-items:center;gap:.45rem;padding:.58rem 1.15rem;border-radius:var(--r-sm);
+  border:1px solid rgba(255,255,255,.1);color:var(--text2);
+  font-family:var(--fs);font-size:.82rem;font-weight:600;
+  background:rgba(255,255,255,.03);transition:all .25s;min-height:44px;
+}
+.vbnav-btn:hover{color:var(--white);border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
+.vbnav-dots{display:flex;gap:5px;align-items:center}
+.vnav-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15)}
+.vnav-dot.active{width:18px;border-radius:3px}
+.view-identity{max-width:1200px;margin:0 auto;padding:clamp(1rem,2vw,1.5rem) clamp(1rem,3vw,1.5rem) clamp(1.2rem,2.5vw,1.8rem);display:flex;flex-direction:column;gap:.5rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.v-badges{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.v-badge{font-family:var(--fh);font-size:.52rem;font-weight:700;letter-spacing:.12em;padding:.16rem .5rem;border:1px solid;border-radius:4px}
+.view-name{font-family:var(--fh);font-size:clamp(1.3rem,3.5vw,2.4rem);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.view-tagline{font-family:var(--fs);font-size:1rem;font-weight:500;color:var(--text3);letter-spacing:.02em}
+
+/* Node tooltip */
+#node-tooltip{
+  position:fixed;background:rgba(5,8,22,.96);border:1px solid rgba(0,229,255,.35);border-radius:var(--r-sm);
+  padding:.5rem .85rem;font-family:var(--fh);font-size:.62rem;letter-spacing:.06em;color:var(--cyan);
+  pointer-events:none;z-index:9999;opacity:0;transition:opacity .25s;backdrop-filter:blur(12px);
+}
+
+/* Safe areas */
+.navbar{padding-top:env(safe-area-inset-top,0px)}
+.hero{padding-top:calc(clamp(80px,12vw,100px) + env(safe-area-inset-top,0px))}
+.topo-view{padding-bottom:env(safe-area-inset-bottom,0px)}
+.view-bottom-nav{padding-bottom:max(1.5rem,env(safe-area-inset-bottom,0px))}
+
+/*========================================================
+  RESPONSIVE BREAKPOINTS
+========================================================*/
+@keyframes nav-slide-in{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:1100px){
+  .hero-container{grid-template-columns:1fr;text-align:center;gap:2.5rem}
+  .hero-left{align-items:center}
+  .hero-sub{text-align:center;max-width:none}
+  .hero-actions{justify-content:center}
+  .hero-features{max-width:440px;margin:0 auto}
+  .hero-stats-bar{justify-content:center}
+  .hero-3d-wrap{width:min(440px,86vw);max-height:420px}
+  .float-card.fc-tl{left:2%;top:4%}
+  .float-card.fc-tr{right:2%}
+  .float-card.fc-br{right:2%}
+  .float-card.fc-bl{left:2%}
+  .intro-grid{grid-template-columns:1fr;gap:2.5rem}
+  .intro-left .section-header{text-align:center;align-items:center}
+  .intro-pills{justify-content:center}
+  .intro-info-grid{grid-template-columns:repeat(3,1fr)}
+  .topo-grid{grid-template-columns:repeat(2,1fr)}
+  .chooser-grid{grid-template-columns:repeat(2,1fr)}
+  .features-grid{grid-template-columns:1fr;gap:3rem}
+  .app-cards{grid-template-columns:repeat(4,1fr)}
+  .redundancy-layout{grid-template-columns:1fr;gap:2rem}
+  .footer-wrap{grid-template-columns:1fr 1fr}
+  .view-body{grid-template-columns:1fr}
+  .view-aside{position:static;display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .v-two-col{grid-template-columns:1fr 1fr}
+  .cta-banner{flex-direction:column;text-align:center;padding:2rem}
+  .knowledge-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:768px){
+  .nav-menu{
+    display:none;flex-direction:column;position:fixed;
+    top:calc(68px + env(safe-area-inset-top,0px));
+    left:0;right:0;background:rgba(5,8,22,.99);
+    backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+    padding:.5rem max(1.5rem,env(safe-area-inset-left,1.5rem)) 2rem max(1.5rem,env(safe-area-inset-right,1.5rem));
+    border-bottom:1px solid var(--glass-border);box-shadow:0 24px 64px rgba(0,0,0,.65);
+    gap:0;z-index:150;
+  }
+  .nav-menu.open{display:flex;animation:nav-slide-in .26s cubic-bezier(.4,0,.2,1) forwards}
+  .nav-menu.open li{border-bottom:1px solid rgba(255,255,255,.05)}
+  .nav-menu.open .nav-link{display:block;padding:.95rem 0;font-size:.98rem;font-weight:600;color:var(--text2);letter-spacing:.03em}
+  .nav-cta{display:none}
+  .hamburger{display:flex}
+  .hero{padding:calc(76px + env(safe-area-inset-top,0px)) max(1.2rem,env(safe-area-inset-right,1.2rem)) 3.5rem max(1.2rem,env(safe-area-inset-left,1.2rem))}
+  .hero-container{gap:2rem}
+  .hero-3d-wrap{width:min(360px,88vw);max-height:320px}
+  .hero-actions{flex-direction:column;width:100%;max-width:380px;margin:0 auto}
+  .btn-primary,.btn-ghost{width:100%;justify-content:center;text-align:center;min-height:52px}
+  .hero-features{grid-template-columns:1fr 1fr;max-width:380px;margin:0 auto}
+  .hero-stats-bar{gap:1rem;justify-content:center}
+  .float-card{display:none}
+  .scroll-indicator{display:none}
+  .section-wrap{padding:3.5rem max(1.2rem,env(safe-area-inset-right,1.2rem)) 3.5rem max(1.2rem,env(safe-area-inset-left,1.2rem))}
+  .topo-grid{grid-template-columns:1fr;gap:1rem}
+  .chooser-grid{grid-template-columns:1fr;gap:1rem}
+  .feat-cards{grid-template-columns:1fr;gap:.75rem}
+  .app-cards{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  .intro-info-grid{grid-template-columns:1fr}
+  .redundancy-layout{gap:1.5rem}
+  .red-table-header{grid-template-columns:1.4fr .6fr}
+  .red-row{grid-template-columns:1.4fr .6fr}
+  .red-table-header span:nth-child(3),.red-table-header span:nth-child(4),
+  .red-row>*:nth-child(3),.red-row>*:nth-child(4){display:none}
+  .footer-wrap{grid-template-columns:1fr;gap:1.8rem;padding:2.5rem max(1.2rem,env(safe-area-inset-right,1.2rem)) calc(2rem + env(safe-area-inset-bottom,0px)) max(1.2rem,env(safe-area-inset-left,1.2rem))}
+  .footer-bottom{flex-direction:column;text-align:center;gap:.5rem}
+  .cta-banner{padding:1.5rem 1.2rem;border-radius:var(--r-lg)}
+  .chooser-toggle,.chooser-view-btn{min-height:48px}
+  .view-3d-section{height:clamp(200px,42svh,360px)}
+  #view3DCanvas{touch-action:none}
+  .view-topbar{padding:0 1rem;height:52px}
+  .view-topbar-title{font-size:.6rem;max-width:130px}
+  .view-counter{display:none}
+  .view-nav-btn{width:40px;height:40px}
+  .view-back-btn{min-height:40px;font-size:.78rem}
+  .view-body{padding:1.4rem 1.2rem 1rem;gap:1.4rem;grid-template-columns:1fr}
+  .view-aside{grid-template-columns:1fr;gap:.9rem}
+  .v-two-col{grid-template-columns:1fr}
+  .view-bottom-nav{padding:1.2rem}
+  .vbnav-btn span{display:none}
+  .score-cell[data-tooltip]::after{display:none}
+  .knowledge-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:480px){
+  .hero-3d-wrap{width:92vw;max-height:240px}
+  .hero-features{grid-template-columns:1fr}
+  .title-line{font-size:clamp(1.3rem,6.8vw,2rem)}
+  .title-accent{font-size:clamp(1.55rem,8vw,2.5rem)}
+  .section-wrap{padding:3rem 1rem}
+  .section-title{font-size:clamp(1.05rem,5.5vw,1.6rem)}
+  .section-sub{font-size:.85rem}
+  .app-cards{grid-template-columns:repeat(2,1fr);gap:.5rem}
+  .app-card{padding:.8rem .5rem}
+  .app-name{font-size:.52rem}
+  .app-desc{font-size:.6rem}
+  .topo-card-content{padding:.85rem 1rem}
+  .topo-card-footer{padding:.6rem 1rem}
+  .topo-card-name{font-size:.82rem}
+  .feat-card{gap:.7rem;padding:.85rem .9rem}
+  .view-3d-section{height:220px}
+  .view-body{padding:1rem;gap:1.2rem}
+  .v-card{padding:.95rem 1.1rem}
+  .v-qfact{padding:.72rem 1rem}
+  .vbnav-btn{padding:.5rem .75rem}
+  .view-back-btn{padding:.3rem .6rem;font-size:.72rem}
+  .cta-banner-left p{max-width:none}
+  .intro-info-grid{grid-template-columns:1fr}
+  .knowledge-card{padding:1.1rem}
+}
+
+@media(max-width:380px){
+  .hero-3d-wrap{width:95vw;max-height:200px}
+  .nav-container{gap:.5rem}
+  .logo-main{font-size:.72rem}
+  .logo-sub{display:none}
+  .section-wrap{padding:2.5rem .9rem}
+  .title-line{font-size:clamp(1.2rem,6.5vw,1.8rem)}
+  .title-accent{font-size:clamp(1.4rem,7.5vw,2.2rem)}
+  .topo-card-desc{font-size:.75rem}
+  .chooser-top h3{font-size:.76rem}
+  .view-back-btn{padding:.28rem .5rem}
+}
+
+@media(max-height:500px) and (orientation:landscape){
+  .hero{min-height:auto;padding-top:calc(66px + env(safe-area-inset-top,0px));padding-bottom:2rem}
+  .hero-container{gap:1.5rem}
+  .hero-3d-wrap{width:min(240px,40vw);max-height:220px}
+  .scroll-indicator{display:none}
+  .section-wrap{padding:2.5rem 1.5rem}
+  .view-3d-section{height:190px}
+}
+</style>
+</head>
+<body>
+
+<div id="tsparticles" aria-hidden="true"></div>
+<div class="grid-overlay" aria-hidden="true"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo" id="navLogo" role="button" tabindex="0" aria-label="Ir al inicio">
+      <svg class="logo-hex" viewBox="0 0 40 46" fill="none" aria-hidden="true">
+        <path d="M20 2L37 11.5V29.5L20 39L3 29.5V11.5L20 2Z" stroke="url(#nlg)" stroke-width="1.5"/>
+        <path d="M20 10L30 16V28L20 34L10 28V16L20 10Z" fill="url(#nlg)" opacity="0.15"/>
+        <circle cx="20" cy="22" r="5" fill="url(#nlg)"/>
+        <defs><linearGradient id="nlg" x1="3" y1="2" x2="37" y2="39" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#3B82F6"/></linearGradient></defs>
+      </svg>
+      <div class="logo-text-block">
+        <span class="logo-main">NEOTOPIA</span>
+        <span class="logo-sub">TOPOLOGÍA 3D</span>
+      </div>
+    </div>
+    <ul class="nav-menu" id="navMenu" role="menubar">
+      <li role="none"><a href="#home" class="nav-link" role="menuitem">Inicio</a></li>
+      <li role="none"><a href="#topologies" class="nav-link" role="menuitem">Topologías</a></li>
+      <li role="none"><a href="#features" class="nav-link" role="menuitem">Características</a></li>
+      <li role="none"><a href="#knowledge" class="nav-link" role="menuitem">Conceptos</a></li>
+      <li role="none"><a href="#redundancy" class="nav-link" role="menuitem">Redundancia</a></li>
+      <li role="none"><a href="#comparative" class="nav-link" role="menuitem">Comparativa</a></li>
+      <li role="none"><a href="#chooser" class="nav-link" role="menuitem">Guía</a></li>
+    </ul>
+    <button class="nav-cta" id="navCta" aria-label="Explorar topologías">Explorar <span>&#8594;</span></button>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home" aria-label="Inicio">
+  <div class="hero-container">
+    <div class="hero-left">
+      <div class="hero-label"><span class="label-dot"></span>APRENDE · EXPLORA · COMPRENDE</div>
+      <h1 class="hero-title">
+        <span class="title-line">Descubre los</span>
+        <span class="title-line">Tipos de Topología</span>
+        <span class="title-accent">de Red</span>
+      </h1>
+      <p class="hero-sub">La topología de red define cómo están organizados y conectados los dispositivos. Explora sus tipos, características y aplicaciones con visualizaciones 3D interactivas.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="btnExplore"><span class="btn-glow"></span><span class="btn-content">Explorar Topologías <span class="btn-arrow">&#8594;</span></span></button>
+        <button class="btn-ghost" id="btnCompare">Ver Comparativa</button>
+      </div>
+    </div>
+  
+  </div>
+  <div class="scroll-indicator" aria-hidden="true">
+    <svg class="scroll-mouse" viewBox="0 0 24 38" fill="none"><rect x="1" y="1" width="22" height="36" rx="11" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><rect class="scroll-wheel" x="10" y="7" width="4" height="8" rx="2" fill="currentColor" opacity="0.7"/></svg>
+    <span>SCROLL PARA EXPLORAR</span>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro-section" id="intro">
+  <div class="section-wrap">
+    <div class="intro-grid">
+      <div class="intro-left">
+        <div class="section-header" style="text-align:left;align-items:flex-start">
+          <div class="section-tag"><span class="tag-dot"></span>FUNDAMENTOS</div>
+          <h2 cla ss="section-title">¿Qué es la Topología de Red?</h2>
+        </div>
+        <p class="intro-lead">Una <strong>topología de red</strong> define cómo están organizados y conectados entre sí los dispositivos. No es solo el cableado — es la <strong>arquitectura lógica</strong> que determina cómo viajan los datos, qué ocurre cuando falla un nodo y cuánto cuesta escalar la red.</p>
+        <p class="intro-lead">Elegir la topología incorrecta puede significar <strong>pérdidas totales ante un fallo simple</strong> (SPOF) o costos de infraestructura desproporcionados.</p>
+        <div class="intro-pills">
+          <span class="pill">Estructura física y lógica</span>
+          <span class="pill">Redundancia y SPOF</span>
+          <span class="pill">Flujo de datos</span>
+          <span class="pill">Escalabilidad</span>
+        </div>
+        <div class="intro-info-grid">
+          <div class="info-box"><div class="info-box-val">6</div><div class="info-box-lbl">Topologías fundamentales</div></div>
+          <div class="info-box"><div class="info-box-val">N(N-1)/2</div><div class="info-box-lbl">Enlacesen malla completa</div></div>
+          <div class="info-box"><div class="info-box-val">SPOF</div><div class="info-box-lbl">Single Point of Failure</div></div>
+        </div>
+      </div>
+      <div class="intro-canvas-wrap">
+        <canvas id="introCanvas" width="420" height="420" aria-hidden="true"></canvas>
+        <div class="intro-canvas-label">Diferentes tipos, misma red</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOPOLOGIES GRID -->
+<section class="topologies" id="topologies">
+  <div class="section-wrap">
+    <header class="section-header">
+      <div class="section-tag"><span class="tag-dot"></span>TOPOLOGÍAS DE RED</div>
+      <h2 class="section-title">Las 6 Topologías Fundamentales</h2>
+      <p class="section-sub">Haz clic en cualquier tarjeta para explorar una visualización 3D interactiva con definición, estructura, ventajas, desventajas y análisis de redundancia.</p>
+    </header>
+    <div class="topo-grid" id="topoGrid">
+      <!-- Cards generated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="section-wrap">
+    <div class="features-grid">
+      <div class="feat-block">
+        <header class="section-header feat-header">
+          <div class="section-tag"><span class="tag-dot" style="background:#00E5FF;box-shadow:0 0 8px #00E5FF"></span>CONCEPTOS CLAVE</div>
+          <h2 class="section-title">Características Topológicas</h2>
+          <p class="section-sub">Estas propiedades determinan el comportamiento, costo y resiliencia de cada arquitectura de red.</p>
+        </header>
+        <div class="feat-cards">
+          <div class="feat-card"><div class="feat-card-icon" style="color:#00E5FF;background:#00E5FF11;border-color:#00E5FF33"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div><div><h4>Conectividad</h4><p>Propiedad de estar conectado o no entre nodos de la red.</p></div></div>
+          <div class="feat-card"><div class="feat-card-icon" style="color:#FF4D8D;background:#FF4D8D11;border-color:#FF4D8D33"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><h4>Redundancia</h4><p>Caminos alternativos para garantizar continuidad ante fallos.</p></div></div>
+          <div class="feat-card"><div class="feat-card-icon" style="color:#FF7A00;background:#FF7A0011;border-color:#FF7A0033"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><h4>Ancho de Banda</h4><p>Compartido vs. dedicado; impacta el rendimiento real de la red.</p></div></div>
+          <div class="feat-card"><div class="feat-card-icon" style="color:#3B82F6;background:#3B82F611;border-color:#3B82F633"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><h4>Latencia</h4><p>Determinística en anillo token; variable en bus con colisiones.</p></div></div>
+          <div class="feat-card"><div class="feat-card-icon" style="color:#94fc17;background:#94fc1711;border-color:#94fc1733"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div><div><h4>Escalabilidad</h4><p>Capacidad de crecer sin rediseñar la arquitectura de red.</p></div></div>
+          <div class="feat-card"><div class="feat-card-icon" style="color:#FF5E5B;background:#FF5E5B11;border-color:#FF5E5B33"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><h4>SPOF</h4><p>Single Point of Failure: nodo cuyo fallo colapsa toda la red.</p></div></div>
+        </div>
+      </div>
+      <div class="apps-block">
+        <header class="section-header feat-header">
+          <div class="section-tag"><span class="tag-dot" style="background:#94fc17;box-shadow:0 0 8px #94fc17"></span>APLICACIONES</div>
+          <h2 class="section-title">Aplicaciones del Mundo Real</h2>
+          <p class="section-sub">Las topologías de red tienen aplicaciones en múltiples sectores de la industria real.</p>
+        </header>
+        <div class="app-cards">
+          <div class="app-card"><div class="app-icon" style="color:#00E5FF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="app-name">Informatica</div><div class="app-desc">Redes LAN, WAN, datacenter</div></div>
+          <div class="app-card"><div class="app-icon" style="color:#3B82F6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="app-name">Seguridad</div><div class="app-desc">Redes críticas e infraestructura</div></div>
+          <div class="app-card"><div class="app-icon" style="color:#FF7A00"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div><div class="app-name">Industria</div><div class="app-desc">CAN bus, automatización SCADA</div></div>
+          <div class="app-card"><div class="app-icon" style="color:#FF4D8D"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="app-name">Telecom</div><div class="app-desc">SONET/SDH, redes metro</div></div>
+          <div class="app-card"><div class="app-icon" style="color:#94fc17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="app-name">Hogares</div><div class="app-desc">Wi-Fi mesh, redes domésticas</div></div>
+          <div class="app-card"><div class="app-icon" style="color:#FF5E5B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="app-name">Cloud</div><div class="app-desc">AWS, Azure, GCP híbrido</div></div>
+          <div class="app-card"><div class="app-icon" style="color:#FF7A00"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><path d="M13 16h4"/></svg></div><div class="app-name">Vehicular</div><div class="app-desc">CAN bus en automóviles</div></div>
+          <div class="app-card"><div class="app-icon" style="color:#00E5FF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="app-name">Educacion</div><div class="app-desc">Campus, laboratorios, aulas</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KNOWLEDGE SECTION — NEW -->
+<section class="knowledge-section" id="knowledge">
+  <div class="section-wrap">
+    <header class="section-header">
+      <div class="section-tag"><span class="tag-dot" style="background:#94fc17;box-shadow:0 0 8px #94fc17"></span>CONCEPTOS TÉCNICOS</div>
+      <h2 class="section-title">Fundamentos que Debes Conocer</h2>
+      <p class="section-sub">Conceptos técnicos esenciales para entender, analizar y diseñar cualquier topología de red.</p>
+    </header>
+    <div class="knowledge-grid">
+      <div class="knowledge-card">
+        <div class="kc-header"><div class="kc-icon" style="color:#FF7A00;background:#FF7A0011;border-color:#FF7A0033"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><div class="kc-title">SPOF — Single Point of Failure</div><div class="kc-sub">Vulnerabilidad crítica de red</div></div></div>
+        <p class="kc-body">Un SPOF es cualquier componente de la red cuyo fallo provoca la interrupción total del servicio. En topología Estrella, el hub central es el SPOF clásico. En Bus, el backbone. Identificar y eliminar SPOFs es el objetivo central del diseño de redes resilientes.</p>
+        <div class="kc-tags"><span class="kc-tag">Estrella: Hub central</span><span class="kc-tag">Bus: Backbone</span><span class="kc-tag">Anillo: Nodo único</span><span class="kc-tag">Árbol: Core switch</span></div>
+      </div>
+      <div class="knowledge-card">
+        <div class="kc-header"><div class="kc-icon" style="color:#00E5FF;background:#00E5FF11;border-color:#00E5FF33"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><div class="kc-title">Fórmula de Malla Completa</div><div class="kc-sub">Cálculo de enlaces requeridos</div></div></div>
+        <p class="kc-body">Para conectar N nodos en malla completa donde cada par tiene un enlace directo, se requieren exactamente N(N-1)/2 conexiones bidireccionales. Este crecimiento cuadrático es la razón por la que Internet usa malla parcial, no completa.</p>
+        <div class="kc-formula">N(N-1)/2 = enlaces totales<br/>10 nodos → 45 enlaces<br/>20 nodos → 190 enlaces</div>
+      </div>
+      <div class="knowledge-card">
+        <div class="kc-header"><div class="kc-icon" style="color:#FF4D8D;background:#FF4D8D11;border-color:#FF4D8D33"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="kc-title">Latencia Determinística</div><div class="kc-sub">Token Ring vs CSMA/CD</div></div></div>
+        <p class="kc-body">La latencia determinística significa que el tiempo máximo de espera para transmitir es calculable y garantizado bajo cualquier carga. Token Ring (IEEE 802.5) lo logra mediante acceso controlado por token. CSMA/CD (Ethernet) tiene latencia variable por colisiones.</p>
+        <div class="kc-tags"><span class="kc-tag">Token Ring: determinística</span><span class="kc-tag">CSMA/CD: variable</span><span class="kc-tag">SONET/SDH: garantizada</span></div>
+      </div>
+      <div class="knowledge-card">
+        <div class="kc-header"><div class="kc-icon" style="color:#3B82F6;background:#3B82F611;border-color:#3B82F633"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="kc-title">STP — Spanning Tree Protocol</div><div class="kc-sub">Prevención de loops en árbol</div></div></div>
+        <p class="kc-body">STP (IEEE 802.1D) y su versión rápida RSTP (802.1w) evitan los loops de red en topologías árbol con enlaces redundantes. Bloquean puertos específicos y los activan automáticamente ante un fallo, logrando reconvergencia en menos de 1 segundo con RSTP.</p>
+        <div class="kc-tags"><span class="kc-tag">STP IEEE 802.1D</span><span class="kc-tag">RSTP IEEE 802.1w &lt;1s</span><span class="kc-tag">MSTP IEEE 802.1s</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REDUNDANCY -->
+<section id="redundancy">
+  <div class="section-wrap">
+    <header class="section-header">
+      <div class="section-tag"><span class="tag-dot" style="background:#FF5E5B;box-shadow:0 0 8px #FF5E5B"></span>ANÁLISIS DE FALLOS</div>
+      <h2 class="section-title">Redundancia y Tolerancia a Fallos</h2>
+      <p class="section-sub">El factor más crítico al elegir una topología. Qué ocurre cuando un nodo o enlace falla en cada arquitectura.</p>
+    </header>
+    <div class="redundancy-layout">
+      <div class="redundancy-canvas-wrap">
+        <canvas id="redundancyCanvas" width="520" height="320" aria-hidden="true"></canvas>
+        <p class="redundancy-caption">Simulación: fallo cíclico del nodo central. Estrella colapsa; Malla continúa operando.</p>
+      </div>
+      <div class="redundancy-table">
+        <div class="red-table-header"><span>Topología</span><span>SPOF</span><span>Redundancia</span><span>Tipo de fallo</span></div>
+        <div class="red-row"><div class="red-topo"><span class="red-dot" style="background:#FF4D8D;box-shadow:0 0 6px #FF4D8D"></span>Estrella</div><span class="red-badge spof">SÍ</span><span class="red-level" style="color:#FF5E5B">Baja</span><span class="red-fail">Centro falla = red colapsa</span></div>
+        <div class="red-row"><div class="red-topo"><span class="red-dot" style="background:#00E5FF;box-shadow:0 0 6px #00E5FF"></span>Bus</div><span class="red-badge spof">SÍ</span><span class="red-level" style="color:#FF5E5B">Nula</span><span class="red-fail">Backbone falla = catastrófico</span></div>
+        <div class="red-row"><div class="red-topo"><span class="red-dot" style="background:#FF007A;box-shadow:0 0 6px #FF007A"></span>Anillo Simple</div><span class="red-badge spof">SÍ</span><span class="red-level" style="color:#FF5E5B">Nula</span><span class="red-fail">1 nodo falla = red partida</span></div>
+        <div class="red-row"><div class="red-topo"><span class="red-dot" style="background:#FF007A;box-shadow:0 0 6px #FF007A"></span>Anillo Doble</div><span class="red-badge no-spof">NO</span><span class="red-level" style="color:#00E5FF">Alta</span><span class="red-fail">Conmutación en milisegundos</span></div>
+        <div class="red-row"><div class="red-topo"><span class="red-dot" style="background:#3B82F6;box-shadow:0 0 6px #3B82F6"></span>Árbol</div><span class="red-badge spof">SÍ</span><span class="red-level" style="color:#FF7A00">Media</span><span class="red-fail">Core falla = red fragmentada</span></div>
+        <div class="red-row"><div class="red-topo"><span class="red-dot" style="background:#FF7A00;box-shadow:0 0 6px #FF7A00"></span>Malla</div><span class="red-badge no-spof">NO</span><span class="red-level" style="color:#00E5FF">Máxima</span><span class="red-fail">Rerouting automático (OSPF/BGP)</span></div>
+        <div class="red-row"><div class="red-topo"><span class="red-dot" style="background:#00E5FF;box-shadow:0 0 6px #00E5FF"></span>Híbrida</div><span class="red-badge var">VAR.</span><span class="red-level" style="color:#FF7A00">Variable</span><span class="red-fail">Depende del diseño</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVE -->
+<section class="comparative" id="comparative">
+  <div class="section-wrap">
+    <header class="section-header">
+      <div class="section-tag"><span class="tag-dot" style="background:#FF7A00;box-shadow:0 0 8px #FF7A00"></span>ANÁLISIS COMPARATIVO</div>
+      <h2 class="section-title">Comparativa Global</h2>
+      <p class="section-sub">5 métricas clave. Pasa el cursor sobre cada celda para ver la descripción. Haz clic en una fila para ver el detalle 3D.</p>
+    </header>
+    <div class="compare-wrap">
+      <div class="compare-table-container">
+        <table class="compare-table" id="compareTable">
+          <thead>
+            <tr>
+              <th class="col-topo">Topología</th>
+              <th><div class="th-inner">Costo</div></th>
+              <th><div class="th-inner">Escalabilidad</div></th>
+              <th><div class="th-inner">Rendimiento</div></th>
+              <th><div class="th-inner">T. Fallos</div></th>
+              <th><div class="th-inner">Facilidad</div></th>
+            </tr>
+          </thead>
+          <tbody id="compareBody"></tbody>
+        </table>
+      </div>
+      <p class="compare-hint">5 = mejor valoración. Costo 5 = muy económico. Haz clic en una fila para explorar la topología en 3D.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHOOSER -->
+<section class="chooser" id="chooser">
+  <div class="section-wrap">
+    <header class="section-header">
+      <div class="section-tag"><span class="tag-dot" style="background:#00E5FF;box-shadow:0 0 8px #00E5FF"></span>GUÍA DE SELECCIÓN</div>
+      <h2 class="section-title">¿Cuál Topología Elegir?</h2>
+      <p class="section-sub">Escenario → recomendación razonada. Expande cada tarjeta para ver el razonamiento técnico completo.</p>
+    </header>
+    <div class="chooser-grid" id="chooserGrid"></div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-section">
+  <div class="section-wrap">
+    <div class="cta-banner">
+      <div class="cta-banner-left">
+        <h2>Sigue Explorando las Topologías de Red</h2>
+        <p>Las topologías de red son fundamentales para entender las conexiones y estructuras que nos rodean. Explora cada una en detalle con visualizaciones 3D interactivas.</p>
+      </div>
+      <button class="btn-primary cta-btn" id="btnCtaExplore"><span class="btn-glow"></span><span class="btn-content">Explorar Más <span class="btn-arrow">&#8594;</span></span></button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top-line"></div>
+  <div class="footer-wrap">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <svg class="logo-hex" viewBox="0 0 40 46" fill="none" aria-hidden="true">
+          <path d="M20 2L37 11.5V29.5L20 39L3 29.5V11.5L20 2Z" stroke="url(#flg)" stroke-width="1.5"/>
+          <circle cx="20" cy="22" r="5" fill="url(#flg)"/>
+          <defs><linearGradient id="flg" x1="3" y1="2" x2="37" y2="39" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#3B82F6"/></linearGradient></defs>
+        </svg>
+        <div class="logo-text-block"><span class="logo-main">NEOTOPIA</span><span class="logo-sub">TOPOLOGÍA 3D</span></div>
+      </div>
+      <p class="footer-tagline">Enciclopedia visual interactiva de topologías de red. Proyecto educativo universitario — Redes de Computadoras.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Pie de página">
+      <span class="footer-nav-title">Navegación</span>
+      <a href="#home">Inicio</a>
+      <a href="#topologies">Topologías</a>
+      <a href="#features">Características</a>
+      <a href="#knowledge">Conceptos</a>
+      <a href="#comparative">Comparativa</a>
+      <a href="#chooser">Guía</a>
+    </nav>
+    <div class="footer-resources">
+      <span class="footer-nav-title">Recursos</span>
+      <a href="#intro">Fundamentos</a>
+      <a href="#chooser">¿Cuál Elegir?</a>
+      <a href="#redundancy">Análisis SPOF</a>
+      <a href="#comparative">Comparativa Global</a>
+    </div>
+    <div class="footer-credits">
+      <span class="footer-nav-title">Tecnologías</span>
+      <p>Canvas 2D API — partículas dinámicas</p>
+      <p>Canvas 2D — visualizaciones de red</p>
+      <p>CSS Animations — efectos visuales</p>
+      <p>Vanilla JS — sin dependencias</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 NEOTOPIA — Proyecto Educativo Universitario</span>
+    <span class="footer-hex">Redes del Futuro</span>
+  </div>
+</footer>
+
+<!-- TOPOLOGY FULL-PAGE VIEW -->
+<div id="topoView" class="topo-view" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="view-topbar" id="viewTopbar">
+    <button class="view-back-btn" id="viewBack" aria-label="Volver">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </button>
+    <span class="view-topbar-title" id="viewTitle"></span>
+    <div class="view-topbar-right">
+      <span class="view-counter" id="viewCounter"></span>
+      <button class="view-nav-btn" id="viewPrevTop" aria-label="Anterior"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <button class="view-nav-btn" id="viewNextTop" aria-label="Siguiente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+  <div class="view-3d-section" id="view3DSection">
+    <canvas id="view3DCanvas" aria-label="Visualización 3D interactiva"></canvas>
+    <div class="view-3d-overlay"><div class="view-3d-hint" id="view3DHint">Arrastra para rotar · Scroll para zoom · Click en nodos</div></div>
+    <div class="view-3d-glow" id="view3DGlow"></div>
+  </div>
+  <div id="viewInner" class="view-inner"></div>
+</div>
+
+<div id="node-tooltip" role="tooltip" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2/tsparticles.slim.bundle.min.js"></script>
+<script>
+/*================================================================
+  NEOTOPIA v5.0 — Enhanced Educational Platform
+  Pure Vanilla JS, Zero Dependencies
+================================================================*/
+
+// ── Topology Data ──────────────────────────────────────────────
+const TOPOLOGIES = [
+  {
+    id:'estrella',num:'TIPO-01',miniType:'star',
+    accentColor:'#FF4D8D',accentColor2:'#FF7A00',
+    chips:['Hub Central','Alta Fiabilidad'],
+    tagline:'Un centro que lo controla todo',
+    shortDesc:'Todos los nodos conectados a un hub o switch central. La más usada en redes LAN modernas.',
+    spof:true,spofDesc:'El switch central es el SPOF. Si colapsa, toda la red queda inoperativa.',
+    redundancyLevel:'baja',redundancyNote:'Sin redundancia inherente.',
+    failureType:'total',failureNote:'Fallo del centro = fallo total.',
+    cableFormula:'N cables para N nodos',cableNote:'Cada dispositivo requiere un cable propio hasta el nodo central.',
+    standards:['Ethernet IEEE 802.3','Fast Ethernet 802.3u','Gigabit Ethernet 802.3ab'],
+    status:'vigente',
+    definition:'La topología estrella conecta todos los nodos directamente a un switch o hub central. La comunicación siempre pasa por este punto central que actúa como controlador del tráfico.',
+    structure:'Un nodo central (hub/switch) actúa como eje. Cada dispositivo periférico tiene su propio enlace dedicado al centro. Con switch: N cables para N nodos, full-duplex y dedicado por enlace.',
+    howItWorks:'Cuando un dispositivo transmite, envía datos al switch central. El switch los reenvía al destinatario consultando su tabla MAC, sin broadcast innecesario en switches modernos.',
+    advantages:[{title:'Fácil diagnóstico',desc:'Los fallos se aíslan fácilmente, el resto continúa sin interrupción.'},{title:'Alta fiabilidad por rama',desc:'El fallo de un nodo periférico no afecta a los demás.'},{title:'Gestión centralizada',desc:'Administración completa desde el nodo central.'},{title:'Escalabilidad simple',desc:'Agregar dispositivos sin interrumpir la red activa.'}],
+    disadvantages:[{title:'SPOF en el centro',desc:'Si el nodo central falla, toda la red colapsa completamente.'},{title:'Costo del hardware central',desc:'Requiere switch de calidad como inversión central.'},{title:'Mayor cableado',desc:'Cada nodo necesita su propio cable hasta el centro.'}],
+    applications:['Redes LAN domésticas y de oficina','Redes empresariales PYME','Laboratorios de computación'],
+    realExample:'Una red de oficina donde computadores, impresoras y teléfonos IP están conectados a un switch central. Es la topología más implementada en redes locales modernas.',
+    stats:{cost:3,scalability:4,performance:4,faultTolerance:3,ease:5},
+  },
+  {
+    id:'bus',num:'TIPO-02',miniType:'bus',
+    accentColor:'#00E5FF',accentColor2:'#3B82F6',
+    chips:['Canal Único','Económico'],
+    tagline:'Un canal compartido por todos',
+    shortDesc:'Canal central compartido por todos los nodos. Histórica en LAN coaxial, vigente en CAN bus industrial.',
+    spof:true,spofDesc:'El backbone es el SPOF total. Un corte inutiliza toda la red.',
+    redundancyLevel:'nula',redundancyNote:'No existe ningún camino alternativo.',
+    failureType:'catastrófico',failureNote:'Fallo del backbone = pérdida total e inmediata.',
+    cableFormula:'1 cable troncal + derivaciones',cableNote:'Un segmento principal con terminadores 50Ω en ambos extremos.',
+    standards:['Ethernet 10Base-2 (ThinNet)','CAN Bus ISO 11898','RS-485'],
+    status:'legacy-lan',
+    definition:'La topología de bus usa un único cable central (backbone) al que todos los dispositivos se conectan mediante derivaciones. Los datos viajan en ambas direcciones como señal eléctrica.',
+    structure:'Un cable coaxial principal actúa como columna vertebral compartida. Los nodos se conectan mediante conectores-T. Los extremos llevan terminadores resistivos (50Ω).',
+    howItWorks:'Un dispositivo verifica si el bus está libre (CSMA/CD). Si disponible, transmite. La señal viaja por todo el cable; solo el destinatario correcto procesa el paquete.',
+    advantages:[{title:'Bajo costo',desc:'Requiere menos cable que otras topologías.'},{title:'Sin hardware central',desc:'No necesita switch ni hub central.'},{title:'Instalación simple',desc:'Fácil en redes pequeñas lineales.'}],
+    disadvantages:[{title:'Fallo catastrófico',desc:'Un corte en el cable inutiliza toda la red.'},{title:'Ancho de banda compartido',desc:'Todos compiten por el mismo canal único.'},{title:'Colisiones frecuentes',desc:'Las transmisiones simultáneas generan colisiones.'}],
+    applications:['CAN bus en vehículos','RS-485 en automatización industrial','Redes coaxiales históricas'],
+    realExample:'El CAN bus (Controller Area Network) en automóviles conecta motor, ABS, airbags y sensores en un único bus de datos compartido. Estándar ISO 11898 vigente.',
+    stats:{cost:5,scalability:2,performance:2,faultTolerance:1,ease:4},
+  },
+  {
+    id:'anillo',num:'TIPO-03',miniType:'ring',
+    accentColor:'#FF007A',accentColor2:'#FF4D8D',
+    chips:['Ciclo Cerrado','Token Ring'],
+    tagline:'Datos que fluyen en circuito cerrado',
+    shortDesc:'Nodos en ciclo cerrado con control por token. Sin colisiones y latencia garantizada.',
+    spof:true,spofDesc:'En anillo simple, cualquier nodo fallido interrumpe todo el ciclo.',
+    redundancyLevel:'media',redundancyNote:'Anillo doble FDDI: alta redundancia por conmutación automática.',
+    failureType:'total-o-nulo',failureNote:'Anillo simple: fallo de 1 nodo = fallo total. Anillo doble: conmutación en ms.',
+    cableFormula:'N cables (simple) / 2N cables (doble)',cableNote:'Anillo doble usa dos anillos concéntricos en direcciones opuestas.',
+    standards:['Token Ring IEEE 802.5','FDDI','SONET/SDH','RPR IEEE 802.17'],
+    status:'legacy-lan',
+    definition:'Cada dispositivo está conectado exactamente a otros dos nodos, formando un circuito cerrado. Los datos viajan unidireccionalmente pasando por cada nodo hasta el destino.',
+    structure:'Cada nodo tiene dos conexiones: al nodo anterior y al siguiente. Token Ring usa un token que circula. Anillo doble FDDI opera con dos anillos en direcciones opuestas.',
+    howItWorks:'Los datos se transmiten como paquetes con la dirección de destino. Cada nodo examina el paquete; si no coincide, lo regenera y reenvía. El token garantiza acceso sin colisiones.',
+    advantages:[{title:'Acceso equitativo',desc:'El token garantiza igual oportunidad sin monopolización.'},{title:'Cero colisiones',desc:'El control por token elimina completamente las colisiones.'},{title:'Latencia determinística',desc:'El tiempo de espera máximo es calculable y predecible.'}],
+    disadvantages:[{title:'Fallo total (simple)',desc:'Un nodo defectuoso interrumpe toda la comunicación.'},{title:'Diagnóstico complejo',desc:'Localizar el fallo requiere verificación nodo por nodo.'},{title:'Modificaciones disruptivas',desc:'Añadir nodos requiere interrumpir la red temporalmente.'}],
+    applications:['Redes FDDI metropolitanas','Sistemas SONET/SDH de telcos','Control industrial de tiempo real'],
+    realExample:'Las redes SONET/SDH en telecomunicaciones metropolitanas usan anillo doble de fibra óptica. Si una fibra se corta, el tráfico se redirige automáticamente en milisegundos.',
+    stats:{cost:3,scalability:2,performance:3,faultTolerance:2,ease:2},
+  },
+  {
+    id:'arbol',num:'TIPO-04',miniType:'tree',
+    accentColor:'#3B82F6',accentColor2:'#00E5FF',
+    chips:['Jerárquica','Escalable'],
+    tagline:'Jerarquía que escala al infinito',
+    shortDesc:'Estructura jerárquica Core-Distribution-Access. Estándar en redes empresariales y campus.',
+    spof:true,spofDesc:'El switch Core es el SPOF para el tráfico inter-rama.',
+    redundancyLevel:'media',redundancyNote:'Redundancia por rama con STP/RSTP prevención de loops.',
+    failureType:'parcial',failureNote:'Fallo de rama = pérdida de subrama. Fallo del Core = red fragmentada.',
+    cableFormula:'N-1 enlaces para N nodos (mínimo)',cableNote:'Árbol jerárquico mínimo, con enlaces redundantes gestionados por STP.',
+    standards:['Ethernet IEEE 802.3','STP IEEE 802.1D','RSTP IEEE 802.1w','VLAN IEEE 802.1Q'],
+    status:'vigente',
+    definition:'La topología de árbol es una extensión jerárquica de la estrella. Combina múltiples grupos estrella en estructura ramificada donde los switches inferiores se conectan a superiores.',
+    structure:'Tres capas: Core (cima), Distribución (agrega tráfico de subredes) y Acceso (dispositivos finales). STP/RSTP previene loops en topologías con enlaces redundantes.',
+    howItWorks:'Los datos suben por la rama del emisor hasta el primer ancestro común con el destinatario, luego descienden por la rama correcta. STP bloquea puertos redundantes y los activa ante fallos.',
+    advantages:[{title:'Escalabilidad máxima',desc:'Se expande añadiendo ramas sin afectar la estructura existente.'},{title:'Gestión jerárquica',desc:'La organización departamental se mapea directamente.'},{title:'Aislamiento por rama',desc:'Un fallo en una rama no afecta a otras.'}],
+    disadvantages:[{title:'Dependencia del Core',desc:'Si el Core falla sin redundancia, se pierde comunicación inter-rama.'},{title:'Mayor infraestructura',desc:'La jerarquía demanda más equipos y cableado.'},{title:'Complejidad de configuración',desc:'Gestionar VLANs, STP y políticas en múltiples niveles.'}],
+    applications:['Redes corporativas empresariales','Campus universitarios','Datacenters Core-Distribution-Access'],
+    realExample:'Una universidad con datacenter central conectado a switches por edificio, y estos a switches por sala. Cada departamento opera su subred independiente.',
+    stats:{cost:3,scalability:5,performance:4,faultTolerance:3,ease:3},
+  },
+  {
+    id:'malla',num:'TIPO-05',miniType:'mesh',
+    accentColor:'#FF7A00',accentColor2:'#FF5E5B',
+    chips:['Sin SPOF','Misión Crítica'],
+    tagline:'Redundancia total, cero puntos débiles',
+    shortDesc:'Cada nodo conectado a múltiples otros. Máxima redundancia para infraestructuras críticas.',
+    spof:false,spofDesc:'En malla completa no existe SPOF. Múltiples caminos independientes garantizan continuidad.',
+    redundancyLevel:'alta',redundancyNote:'Malla completa: redundancia máxima absoluta.',
+    failureType:'ninguno',failureNote:'Fallo de nodo o enlace = rerouting automático en segundos.',
+    cableFormula:'N(N−1)/2 enlaces totales',cableNote:'Crecimiento cuadrático: Internet usa malla parcial, no completa.',
+    standards:['OSPF (Open Shortest Path First)','IS-IS','BGP (Border Gateway Protocol)','Wi-Fi Mesh IEEE 802.11s'],
+    status:'vigente',
+    definition:'En la topología de malla, cada dispositivo tiene conexiones directas con múltiples o todos los demás nodos. La malla completa conecta cada nodo con absolutamente todos los demás.',
+    structure:'Para N nodos en malla completa, cada nodo tiene N-1 conexiones, totalizando N(N-1)/2 enlaces bidireccionales. El tráfico puede enrutarse dinámicamente por múltiples caminos.',
+    howItWorks:'Los protocolos de enrutamiento dinámico (OSPF, BGP) calculan en tiempo real el camino óptimo. Si un enlace falla, el protocolo recalcula automáticamente rutas alternativas sin intervención humana.',
+    advantages:[{title:'Sin punto único de fallo',desc:'En malla completa no existe SPOF. La red sobrevive fallos múltiples.'},{title:'Auto-reparación',desc:'Los protocolos detectan fallos y rerutan automáticamente.'},{title:'Máximo rendimiento',desc:'El tráfico se distribuye entre múltiples rutas simultáneas.'}],
+    disadvantages:[{title:'Costo extremado',desc:'N(N-1)/2 enlaces hace el costo prohibitivo a gran escala.'},{title:'Complejidad alta',desc:'Requiere ingenieros especializados en enrutamiento dinámico.'},{title:'Escalabilidad limitada',desc:'Cada nuevo nodo requiere N nuevas conexiones.'}],
+    applications:['Backbone de Internet','Redes militares y de defensa','Datacenters de alta disponibilidad','Wi-Fi Mesh doméstico (parcial)'],
+    realExample:'El backbone de Internet es una malla parcial: los principales ISPs están interconectados con múltiples rutas redundantes. ARPANET fue diseñada así para sobrevivir ataques nucleares.',
+    stats:{cost:1,scalability:2,performance:5,faultTolerance:5,ease:1},
+  },
+  {
+    id:'hibrida',num:'TIPO-06',miniType:'hybrid',
+    accentColor:'#00E5FF',accentColor2:'#FF4D8D',
+    chips:['Flexible','Empresarial'],
+    tagline:'Lo mejor de cada mundo, combinado',
+    shortDesc:'Combinación estratégica de múltiples topologías. Estándar en grandes corporaciones e ISPs.',
+    spof:false,spofDesc:'Depende del diseño. Puede eliminar todos los SPOF con malla en el núcleo.',
+    redundancyLevel:'variable',redundancyNote:'Redundancia diferenciada: malla en crítico, árbol/estrella en estándar.',
+    failureType:'parcial',failureNote:'Un fallo aislado afecta solo al segmento según su topología local.',
+    cableFormula:'Variable según combinación',cableNote:'Suma de requisitos de cada topología componente optimizada por segmento.',
+    standards:['BGP (entre sedes)','OSPF (dentro de sede)','STP/RSTP (acceso)','VLAN IEEE 802.1Q','MPLS'],
+    status:'vigente',
+    definition:'La topología híbrida combina dos o más topologías base diferentes en una red integrada. Se diseña para aprovechar las ventajas de cada topología y minimizar sus debilidades.',
+    structure:'Combina segmentos de diferentes topologías interconectados mediante routers L3. Ejemplo: malla entre datacenters, árbol dentro de cada sede, estrella en cada piso.',
+    howItWorks:'Cada segmento funciona según su topología con sus protocolos propios. BGP (entre sedes), OSPF (dentro de sede) y STP (acceso) coordinan la red global completa.',
+    advantages:[{title:'Máxima flexibilidad',desc:'Se adapta a cualquier requisito sin restricciones de topología única.'},{title:'Optimización por función',desc:'Cada segmento usa la topología más eficiente para su propósito.'},{title:'Redundancia diferenciada',desc:'Los segmentos críticos usan malla; los estándar usan árbol.'}],
+    disadvantages:[{title:'Complejidad de diseño',desc:'Planificar múltiples topologías interconectadas requiere experiencia avanzada.'},{title:'Mayor costo total',desc:'Hardware heterogéneo y personal especializado en cada tecnología.'},{title:'Diagnóstico complejo',desc:'Fallos en las interfaces entre topologías son difíciles de localizar.'}],
+    applications:['Multinacionales e ISPs','AWS, Azure, GCP','Redes hospitalarias y gubernamentales','Datacenters distribuidos globalmente'],
+    realExample:'Red global de multinacional: malla entre datacenters en NY, Londres y Tokio; árbol dentro de cada datacenter; estrella en cada piso de oficina. BGP, OSPF y STP coordinan.',
+    stats:{cost:2,scalability:5,performance:5,faultTolerance:4,ease:2},
+  },
+];
+
+const CHOOSER_DATA = [
+  {id:'estrella',scenario:'Red de hogar o PYME',desc:'Pocas decenas de dispositivos, gestión simple, bajo presupuesto.',reason:'La Estrella es ideal porque el fallo de un dispositivo periférico no afecta al resto. El switch central es económico y fácil de administrar.'},
+  {id:'arbol',scenario:'Gran empresa o campus',desc:'Cientos de dispositivos en múltiples departamentos, pisos o edificios.',reason:'El Árbol refleja naturalmente la jerarquía organizacional. STP/RSTP previene loops. La arquitectura Core-Distribution-Access es el estándar de facto.'},
+  {id:'malla',scenario:'Misión crítica',desc:'Hospitales, plantas industriales, datacenters donde el downtime es inaceptable.',reason:'La Malla es la única topología sin SPOF por diseño. OSPF/BGP rerutan automáticamente ante cualquier fallo en segundos.'},
+  {id:'bus',scenario:'Entorno industrial lineal',desc:'Redes vehiculares (CAN bus), automatización industrial con presupuesto mínimo.',reason:'En LAN moderna el Bus está obsoleto. Pero en redes vehiculares (CAN bus ISO 11898) y RS-485 es el estándar específico.'},
+  {id:'anillo',scenario:'Telecom metropolitana',desc:'Redes SONET/SDH de telcos donde la latencia garantizada es un requisito crítico.',reason:'El Anillo doble (FDDI/SONET) tiene latencia determinística y cero colisiones. Si se corta una fibra, el anillo secundario restaura en milisegundos.'},
+  {id:'hibrida',scenario:'Multinacional o ISP',desc:'Organizaciones con sedes globales y requisitos diferenciados por segmento.',reason:'Ninguna topología única sirve a todos los requisitos. Malla entre datacenters, árbol dentro de cada sede, estrella en cada departamento.'},
+];
+
+// ── Helpers ────────────────────────────────────────────────────
+function hexToRgb(hex){
+  hex=hex.replace('#','');
+  if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');
+  const n=parseInt(hex,16);
+  return`${(n>>16)&255},${(n>>8)&255},${n&255}`;
+}
+
+// ── Canvas drawing ─────────────────────────────────────────────
+function drawNode(ctx,x,y,r,color){
+  ctx.beginPath();ctx.arc(x,y,r*2.6,0,Math.PI*2);
+  ctx.fillStyle=`rgba(${hexToRgb(color)},.1)`;ctx.fill();
+  ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fillStyle=color;ctx.shadowBlur=r*3;ctx.shadowColor=color;ctx.fill();ctx.shadowBlur=0;
+}
+function drawLine(ctx,x1,y1,x2,y2,color,alpha=.3){
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+  ctx.strokeStyle=`rgba(${hexToRgb(color)},${alpha})`;ctx.lineWidth=1.2;ctx.stroke();
+}
+function drawPacket(ctx,x1,y1,x2,y2,color,prog){
+  const px=x1+(x2-x1)*prog,py=y1+(y2-y1)*prog;
+  const trail=Math.max(0,prog-.12);
+  const tx=x1+(x2-x1)*trail,ty=y1+(y2-y1)*trail;
+  const g=ctx.createLinearGradient(tx,ty,px,py);
+  g.addColorStop(0,`rgba(${hexToRgb(color)},0)`);g.addColorStop(1,`rgba(${hexToRgb(color)},.9)`);
+  ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(px,py);ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.stroke();
+  ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);
+  ctx.fillStyle=color;ctx.shadowBlur=9;ctx.shadowColor=color;ctx.fill();ctx.shadowBlur=0;
+}
+
+function drawTopology(ctx,W,H,type,t){
+  const fn={star:drawStar,bus:drawBus,ring:drawRing,tree:drawTree,mesh:drawMesh,hybrid:drawHybrid};
+  if(fn[type])fn[type](ctx,W,H,t);
+}
+
+function drawStar(ctx,W,H,t){
+  const cx=W/2,cy=H/2,R=Math.min(W,H)*.34,n=5;
+  const nodes=Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return{x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)}});
+  nodes.forEach((nd,i)=>{drawLine(ctx,cx,cy,nd.x,nd.y,'#FF4D8D',.35);drawPacket(ctx,cx,cy,nd.x,nd.y,'#FF7A00',(t*.007+i/n)%1)});
+  nodes.forEach(nd=>drawNode(ctx,nd.x,nd.y,5,'#FF4D8D'));
+  drawNode(ctx,cx,cy,9,'#FF7A00');
+  ctx.font='8px monospace';ctx.fillStyle='rgba(255,255,255,.5)';ctx.textAlign='center';ctx.fillText('SW',cx,cy+16);
+}
+
+function drawBus(ctx,W,H,t){
+  const pad=W*.1,y=H/2,n=5;
+  const nodes=Array.from({length:n},(_,i)=>({x:pad+(i/(n-1))*(W-pad*2),y}));
+  const bg=ctx.createLinearGradient(pad,y,W-pad,y);
+  bg.addColorStop(0,'rgba(0,229,255,0)');bg.addColorStop(.1,'rgba(0,229,255,.5)');bg.addColorStop(.9,'rgba(0,229,255,.5)');bg.addColorStop(1,'rgba(0,229,255,0)');
+  ctx.beginPath();ctx.moveTo(pad-8,y);ctx.lineTo(W-pad+8,y);
+  ctx.strokeStyle=bg;ctx.lineWidth=2;ctx.shadowBlur=8;ctx.shadowColor='#00E5FF';ctx.stroke();ctx.shadowBlur=0;
+  const px=pad+((t*.008)%1)*(W-pad*2);
+  ctx.beginPath();ctx.arc(px,y,3,0,Math.PI*2);
+  ctx.fillStyle='#00E5FF';ctx.shadowBlur=10;ctx.shadowColor='#00E5FF';ctx.fill();ctx.shadowBlur=0;
+  nodes.forEach((nd,i)=>{const ny=i%2===0?y-28:y+28;drawLine(ctx,nd.x,nd.y,nd.x,ny,'#00E5FF',.3);drawNode(ctx,nd.x,ny,5,'#3B82F6')});
+}
+
+function drawRing(ctx,W,H,t){
+  const cx=W/2,cy=H/2,r=Math.min(W,H)*.35,n=6;
+  const nodes=Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)}});
+  nodes.forEach((nd,i)=>{const next=nodes[(i+1)%n];drawLine(ctx,nd.x,nd.y,next.x,next.y,'#FF007A',.35);drawPacket(ctx,nd.x,nd.y,next.x,next.y,'#FF4D8D',(t*.006+i/n)%1)});
+  const ta=(t*.006)*Math.PI*2-Math.PI/2;
+  ctx.beginPath();ctx.arc(cx+r*Math.cos(ta),cy+r*Math.sin(ta),4,0,Math.PI*2);
+  ctx.fillStyle='#FFF';ctx.shadowBlur=8;ctx.shadowColor='#FF007A';ctx.fill();ctx.shadowBlur=0;
+  nodes.forEach(nd=>drawNode(ctx,nd.x,nd.y,5.5,'#FF007A'));
+}
+
+function drawTree(ctx,W,H,t){
+  const root={x:W/2,y:H*.12};
+  const lvl1=[{x:W*.28,y:H*.45},{x:W*.72,y:H*.45}];
+  const lvl2=[{x:W*.14,y:H*.82},{x:W*.38,y:H*.82},{x:W*.62,y:H*.82},{x:W*.86,y:H*.82}];
+  lvl1.forEach((nd,i)=>{drawLine(ctx,root.x,root.y,nd.x,nd.y,'#3B82F6',.4);drawPacket(ctx,root.x,root.y,nd.x,nd.y,'#00E5FF',(t*.007+i*.5)%1)});
+  [[0,0],[0,1],[1,2],[1,3]].forEach(([l1i,l2i],i)=>{const a=lvl1[l1i],b=lvl2[l2i];drawLine(ctx,a.x,a.y,b.x,b.y,'#3B82F6',.35);drawPacket(ctx,a.x,a.y,b.x,b.y,'#00E5FF',(t*.006+i*.25)%1)});
+  drawNode(ctx,root.x,root.y,8,'#3B82F6');
+  ctx.font='8px monospace';ctx.fillStyle='rgba(255,255,255,.5)';ctx.textAlign='center';ctx.fillText('Core',root.x,root.y+16);
+  lvl1.forEach(nd=>{drawNode(ctx,nd.x,nd.y,6,'#3B82F6');ctx.font='7px monospace';ctx.fillText('Dist',nd.x,nd.y+13)});
+  lvl2.forEach(nd=>drawNode(ctx,nd.x,nd.y,4.5,'#00E5FF'));
+}
+
+function drawMesh(ctx,W,H,t){
+  const cx=W/2,cy=H/2,r=Math.min(W,H)*.33,n=5;
+  const nodes=Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)}});
+  let pi=0;
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){
+    drawLine(ctx,nodes[i].x,nodes[i].y,nodes[j].x,nodes[j].y,'#FF7A00',.2);
+    if(pi%3===0)drawPacket(ctx,nodes[i].x,nodes[i].y,nodes[j].x,nodes[j].y,'#FF5E5B',(t*.005+pi*.17)%1);pi++;
+  }
+  nodes.forEach(nd=>drawNode(ctx,nd.x,nd.y,6,'#FF7A00'));
+  ctx.font='9px monospace';ctx.fillStyle='rgba(255,122,0,.55)';ctx.textAlign='center';ctx.fillText('N(N−1)/2',cx,cy);
+}
+
+function drawHybrid(ctx,W,H,t){
+  const cx=W/2,cy=H*.42,spoke=Math.min(W,H)*.22,n=4;
+  const hubs=Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2;return{x:cx+spoke*Math.cos(a),y:cy+spoke*Math.sin(a)}});
+  hubs.forEach((nd,i)=>{drawLine(ctx,cx,cy,nd.x,nd.y,'#FF4D8D',.35);drawPacket(ctx,cx,cy,nd.x,nd.y,'#FF7A00',(t*.008+i*.25)%1)});
+  hubs.forEach((nd,i)=>{const next=hubs[(i+1)%n];drawLine(ctx,nd.x,nd.y,next.x,next.y,'#00E5FF',.3);drawPacket(ctx,nd.x,nd.y,next.x,next.y,'#00E5FF',(t*.006+i*.25)%1)});
+  drawNode(ctx,cx,cy,8,'#FF4D8D');
+  hubs.forEach(nd=>drawNode(ctx,nd.x,nd.y,5.5,'#00E5FF'));
+}
+
+// ── tsParticles — Reactive Topology Network ────────────────────
+const TS_CONFIG = {
+  fpsLimit: 60,
+  pauseOnBlur: true,
+  background: { color: { value: 'transparent' } },
+  particles: {
+    number: { value: 300 },
+    color: { value: ['#94fc17','#00E5FF','#3B82F6','#FF4D8D','#FF7A00'] },
+    shape: { type: 'circle' },
+    opacity: {
+      value: { min: 0.12, max: 0.82 },
+      animation: { enable: true, speed: 1.8, startValue: 'random', sync: false }
+    },
+    size: {
+      value: { min: 1.0, max: 3.8 },
+      animation: { enable: true, speed: 3, startValue: 'random', sync: false }
+    },
+    links: {
+      enable: true,
+      distance: 145,
+      color: '#00E5FF',
+      opacity: 0.28,
+      width: 0.85,
+      triangles: { enable: false }
+    },
+    move: {
+      enable: true,
+      speed: { min: 0.25, max: 1.35 },
+      direction: 'none',
+      random: true,
+      straight: false,
+      outModes: { default: 'out' }
+    }
+  },
+  interactivity: {
+    detectsOn: 'window',
+    events: {
+      onHover: { enable: true, mode: 'repulse' },
+      onClick: { enable: true, mode: ['push', 'bubble'] },
+      resize: { enable: true }
+    },
+    modes: {
+      repulse: {
+        distance: 190,
+        duration: 0.45,
+        factor: 100,
+        speed: 1.5,
+        maxSpeed: 50,
+        easing: 'ease-out-quad'
+      },
+      push: { quantity: 8 },
+      bubble: {
+        distance: 220,
+        size: 7,
+        duration: 0.35,
+        opacity: 0.78,
+        speed: 3
+      }
+    }
+  },
+  responsive: [
+    {
+      maxWidth: 768,
+      options: {
+        particles: {
+          number: { value: 100 },
+          links: { distance: 110 }
+        },
+        interactivity: {
+          modes: { repulse: { distance: 120 } }
+        }
+      }
+    }
+  ],
+  detectRetina: true
+};
+// ── Hero 3D sphere (Canvas 2D simulation) ──────────────────────
+function initHeroSphere(canvas){
+  const ctx=canvas.getContext('2d');
+  const COLORS=['#00E5FF','#3B82F6','#94fc17','#FF4D8D','#FF7A00'];
+  let W,H,nodes=[],angle=0,raf;
+  function resize(){
+    const p=canvas.parentElement;W=canvas.width=p.clientWidth||520;H=canvas.height=p.clientHeight||W;
+  }
+  function genNodes(){
+    const n=window.innerWidth<480?18:window.innerWidth<768?24:36;
+    nodes=Array.from({length:n},(_,i)=>{
+      const phi=Math.acos(1-(2*(i+.5))/n);
+      const theta=Math.PI*(1+Math.sqrt(5))*i;
+      const r=2.6+Math.random()*.5;
+      const col=COLORS[i%COLORS.length];
+      return{phi,theta,r,col,pulse:Math.random()*Math.PI*2,pSpeed:.015+Math.random()*.01};
+    });
+  }
+  function project(lat,lon,r,scale,cx,cy){
+    const x3=r*Math.sin(lat)*Math.cos(lon+angle);
+    const y3=r*Math.sin(lat)*Math.sin(lon+angle);
+    const z3=r*Math.cos(lat);
+    const rx=x3*Math.cos(.3)+z3*Math.sin(.3);
+    const ry=y3+.05*Math.sin(Date.now()*.0005);
+    const rz=-x3*Math.sin(.3)+z3*Math.cos(.3);
+    const _d=scale-rz*20;
+    if(!isFinite(_d)||Math.abs(_d)<1e-6)return{x:-9999,y:-9999,z:rz,persp:0};
+    const persp=scale/_d;
+    if(persp<=0)return{x:-9999,y:-9999,z:rz,persp:0};
+    return{x:cx+rx*persp*50,y:cy+ry*persp*50,z:rz,persp};
+  }
+  function frame(){
+    raf=requestAnimationFrame(frame);
+    ctx.clearRect(0,0,W,H);
+    const cx=W/2,cy=H/2,scale=6;
+    angle+=.006;
+    // Project nodes
+    const proj=nodes.map(n=>{
+      n.pulse+=n.pSpeed;
+      const p=project(n.phi,n.theta,n.r,scale,cx,cy);
+      return{...p,col:n.col,pulse:n.pulse};
+    }).filter(p=>p.persp>0&&p.x>-9000);
+    // Sort by depth
+    proj.sort((a,b)=>a.z-b.z);
+    // Draw connections
+    for(let i=0;i<proj.length;i++){
+      for(let j=i+1;j<proj.length;j++){
+        const dx=proj[i].x-proj[j].x,dy=proj[i].y-proj[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<W*.18){
+          const alpha=(1-d/(W*.18))*.18*(proj[i].z+1.5)/3;
+          ctx.beginPath();ctx.moveTo(proj[i].x,proj[i].y);ctx.lineTo(proj[j].x,proj[j].y);
+          ctx.strokeStyle=`rgba(0,229,255,${alpha})`;ctx.lineWidth=.8;ctx.stroke();
+        }
+      }
+    }
+    // Draw nodes
+    proj.forEach(p=>{
+      const vis=(p.z+1.5)/3;
+      const pF=.5+.5*Math.sin(p.pulse);
+      const r=Math.max(2,(4+pF*2)*Math.max(0,vis)*p.persp);
+      if(!isFinite(r)||r<=0)return;
+      ctx.beginPath();ctx.arc(p.x,p.y,r*2,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${hexToRgb(p.col)},.08)`;ctx.fill();
+      ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${hexToRgb(p.col)},${Math.max(0,(.5+pF*.4)*vis)})`;
+      ctx.shadowBlur=r*3;ctx.shadowColor=p.col;ctx.fill();ctx.shadowBlur=0;
+    });
+  }
+  resize();genNodes();frame();
+  const ro=new ResizeObserver(()=>{resize();genNodes()});
+  if(canvas.parentElement)ro.observe(canvas.parentElement);
+  return{destroy(){cancelAnimationFrame(raf);ro.disconnect()}};
+}
+
+// ── Mini canvas animations ─────────────────────────────────────
+function initMiniCanvases(){
+  document.querySelectorAll('.mini-canvas').forEach(canvas=>{
+    const type=canvas.dataset.topo;
+    if(!type)return;
+    const ctx=canvas.getContext('2d');
+    let t=0,raf;
+    // DPR
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=120*dpr;canvas.height=100*dpr;
+    ctx.scale(dpr,dpr);
+    function frame(){
+      raf=requestAnimationFrame(frame);
+      ctx.clearRect(0,0,120,100);
+      drawTopology(ctx,120,100,type,t);
+      t++;
+    }
+    frame();
+    // Stop when offscreen
+    if('IntersectionObserver' in window){
+      const obs=new IntersectionObserver(([e])=>{
+        if(!e.isIntersecting&&raf){cancelAnimationFrame(raf);raf=null}
+        else if(e.isIntersecting&&!raf)frame();
+      },{threshold:.1});
+      obs.observe(canvas);
+    }
+  });
+}
+
+// ── Intro rotating canvas ──────────────────────────────────────
+function initIntroCanvas(){
+  const canvas=document.getElementById('introCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=420*dpr;canvas.height=420*dpr;ctx.scale(dpr,dpr);
+  const types=['star','bus','ring','tree','mesh','hybrid'];
+  let cur=0,t=0,alpha=1,transitioning=false,raf;
+  function frame(){
+    raf=requestAnimationFrame(frame);
+    ctx.clearRect(0,0,420,420);
+    ctx.save();ctx.globalAlpha=alpha;
+    drawTopology(ctx,420,420,types[cur],t);
+    ctx.restore();
+    t++;
+    // Cycle every 240 frames
+    if(t%240===0&&!transitioning){
+      transitioning=true;
+      let fadeT=0;
+      const fade=setInterval(()=>{
+        fadeT++;alpha=1-fadeT/20;
+        if(fadeT>=20){clearInterval(fade);cur=(cur+1)%types.length;alpha=0;
+          let inT=0;const fadeIn=setInterval(()=>{inT++;alpha=inT/20;if(inT>=20){clearInterval(fadeIn);transitioning=false}},20)}
+      },20);
+    }
+  }
+  frame();
+}
+
+// ── Redundancy canvas ──────────────────────────────────────────
+function initRedundancyCanvas(){
+  const canvas=document.getElementById('redundancyCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=520*dpr;canvas.height=320*dpr;ctx.scale(dpr,dpr);
+  let t=0;
+  function frame(){
+    requestAnimationFrame(frame);
+    ctx.clearRect(0,0,520,320);
+    const failPhase=Math.floor(t/200)%2;
+    const failAmt=(t%200)/200;
+    // Left: Star topology
+    const cx1=130,cy=160,R=80;
+    const nodeCount=5;
+    const starNodes=Array.from({length:nodeCount},(_,i)=>{
+      const a=(i/nodeCount)*Math.PI*2;
+      return{x:cx1+R*Math.cos(a),y:cy+R*Math.sin(a)};
+    });
+    // Hub failure simulation
+    const hubFail=failPhase===1&&failAmt>.4;
+    starNodes.forEach(nd=>{
+      const active=!hubFail;
+      drawLine(ctx,cx1,cy,nd.x,nd.y,active?'#FF4D8D':'#444',.35);
+      if(active)drawPacket(ctx,cx1,cy,nd.x,nd.y,'#FF7A00',(t*.006+starNodes.indexOf(nd)/nodeCount)%1);
+      drawNode(ctx,nd.x,nd.y,6,active?'#FF4D8D':'#333');
+    });
+    const hubColor=hubFail?'#FF5E5B':'#FF7A00';
+    drawNode(ctx,cx1,cy,10,hubColor);
+    ctx.font='bold 9px monospace';ctx.fillStyle=hubFail?'#FF5E5B':'rgba(255,255,255,.5)';
+    ctx.textAlign='center';ctx.fillText(hubFail?'⚡ FALLO':'Hub',cx1,cy+22);
+
+    // Label
+    ctx.fillStyle='rgba(255,255,255,.35)';ctx.font='8px sans-serif';
+    ctx.fillText('ESTRELLA',cx1,cy-R-14);
+
+    // Right: Mesh topology
+    const cx2=390,meshR=80,mn=5;
+    const meshNodes=Array.from({length:mn},(_,i)=>{const a=(i/mn)*Math.PI*2;return{x:cx2+meshR*Math.cos(a),y:cy+meshR*Math.sin(a)}});
+    const failNode=failPhase===1&&failAmt>.4?1:-1;
+    for(let i=0;i<mn;i++)for(let j=i+1;j<mn;j++){
+      const active=i!==failNode&&j!==failNode;
+      drawLine(ctx,meshNodes[i].x,meshNodes[i].y,meshNodes[j].x,meshNodes[j].y,active?'#FF7A00':'#333',active?.25:.08);
+      if(active&&(i+j)%3===0)drawPacket(ctx,meshNodes[i].x,meshNodes[i].y,meshNodes[j].x,meshNodes[j].y,'#FF5E5B',(t*.004+i*.2+j*.1)%1);
+    }
+    meshNodes.forEach((nd,i)=>{
+      const active=i!==failNode;
+      drawNode(ctx,nd.x,nd.y,6,active?'#FF7A00':'#444');
+      if(i===failNode&&failPhase===1&&failAmt>.4){
+        ctx.font='bold 10px monospace';ctx.fillStyle='#FF5E5B';ctx.textAlign='center';ctx.fillText('⚡',nd.x,nd.y-12);
+      }
+    });
+    ctx.fillStyle='rgba(255,255,255,.35)';ctx.font='8px sans-serif';ctx.textAlign='center';ctx.fillText('MALLA',cx2,cy-meshR-14);
+
+    // Center divider
+    ctx.beginPath();ctx.moveTo(260,40);ctx.lineTo(260,280);
+    ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=1;ctx.stroke();
+
+    t++;
+  }
+  frame();
+}
+
+// ── Compare table ──────────────────────────────────────────────
+function buildCompareTable(){
+  const tbody=document.getElementById('compareBody');
+  if(!tbody)return;
+  const tooltips={cost:['Muy económico','Económico','Moderado','Caro','Muy caro'],scalability:['Muy limitada','Limitada','Moderada','Buena','Excelente'],performance:['Muy bajo','Bajo','Moderado','Alto','Muy alto'],faultTolerance:['Sin tolerancia','Baja','Moderada','Alta','Máxima'],ease:['Muy difícil','Difícil','Moderado','Fácil','Muy fácil']};
+  const keys=['cost','scalability','performance','faultTolerance','ease'];
+  TOPOLOGIES.forEach(d=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="col-topo"><div class="topo-name-cell"><div class="topo-dot" style="background:${d.accentColor};box-shadow:0 0 6px ${d.accentColor}55"></div><div><span class="topo-cell-name">${d.id.charAt(0).toUpperCase()+d.id.slice(1)}</span><div class="topo-cell-meta"><span class="tbl-spof ${d.spof?'yes':'no'}">${d.spof?'SPOF':'SIN SPOF'}</span></div></div></div></td>`+
+    keys.map(k=>{
+      const s=d.stats[k];
+      const dots=Array.from({length:5},(_,i)=>`<div class="score-dot" style="${i<s?`background:${d.accentColor};box-shadow:0 0 4px ${d.accentColor}`:''};border-radius:50%"></div>`).join('');
+      return`<td class="score-cell" data-tooltip="${tooltips[k][s-1]}"><div class="score-dots">${dots}</div></td>`;
+    }).join('');
+    tr.addEventListener('click',()=>openTopologyView(d.id));
+    tbody.appendChild(tr);
+  });
+}
+
+// ── Chooser section ────────────────────────────────────────────
+function buildChooser(){
+  const grid=document.getElementById('chooserGrid');
+  if(!grid)return;
+  CHOOSER_DATA.forEach(c=>{
+    const topo=TOPOLOGIES.find(t=>t.id===c.id);
+    const card=document.createElement('div');
+    card.className='chooser-card';card.dataset.open=c.id;
+    card.innerHTML=`
+      <div class="chooser-top">
+        <div class="chooser-icon" style="color:${topo.accentColor};background:${topo.accentColor}11;border-color:${topo.accentColor}33">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div><h3>${c.scenario}</h3><p>${c.desc}</p></div>
+      </div>
+      <div class="chooser-rec">
+        <span class="rec-label">Recomendada:</span>
+        <span class="rec-val" style="color:${topo.accentColor}">${topo.id.charAt(0).toUpperCase()+topo.id.slice(1)}</span>
+      </div>
+      <button class="chooser-toggle">Ver razonamiento ▾</button>
+      <div class="chooser-body"><p>${c.reason}</p></div>
+      <button class="chooser-view-btn">Ver detalle técnico completo →</button>`;
+    card.querySelector('.chooser-toggle').addEventListener('click',function(){
+      const body=this.nextElementSibling;
+      body.classList.toggle('open');
+      this.textContent=body.classList.contains('open')?'Ocultar razonamiento ▴':'Ver razonamiento ▾';
+    });
+    card.querySelector('.chooser-view-btn').addEventListener('click',()=>openTopologyView(c.id));
+    grid.appendChild(card);
+  });
+}
+
+// ── Topology cards grid ────────────────────────────────────────
+function buildTopoGrid(){
+  const grid=document.getElementById('topoGrid');
+  if(!grid)return;
+  TOPOLOGIES.forEach(d=>{
+    const card=document.createElement('article');
+    card.className='topo-card';card.dataset.type=d.id;card.tabIndex=0;card.role='button';
+    card.setAttribute('aria-label',`Explorar Topología ${d.id}`);
+    card.innerHTML=`
+      <div class="topo-card-glow"></div>
+      <div class="topo-card-body">
+        <div class="topo-card-visual">
+          <canvas class="mini-canvas" data-topo="${d.miniType}" width="120" height="100" aria-hidden="true"></canvas>
+        </div>
+        <div class="topo-card-content">
+          <div class="topo-card-header">
+            <div class="topo-dot" style="background:${d.accentColor};box-shadow:0 0 8px ${d.accentColor}55"></div>
+            <h3 class="topo-card-name">Topología ${d.id.charAt(0).toUpperCase()+d.id.slice(1)}</h3>
+          </div>
+          <p class="topo-card-desc">${d.shortDesc}</p>
+          <div class="topo-card-section">
+            <span class="tcs-label" style="color:${d.accentColor}">Características:</span>
+            <ul class="tcs-list">
+              <li>${d.spof?'SPOF en '+d.failureType:'Sin SPOF — '+d.redundancyLevel+' redundancia'}</li>
+              <li>${d.standards[0]||'-'}</li>
+              <li>${d.status==='vigente'?'Ampliamente utilizado hoy':'Uso especializado/legacy'}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="topo-card-footer">
+          <div class="topo-chips">
+            ${d.chips.map(ch=>`<span class="chip" style="color:${d.accentColor};border-color:${d.accentColor}44;background:${d.accentColor}11">${ch}</span>`).join('')}
+          </div>
+          <button class="topo-cta" tabindex="-1">Ver 3D <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>`;
+    card.addEventListener('click',()=>openTopologyView(d.id));
+    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openTopologyView(d.id)});
+    grid.appendChild(card);
+  });
+  initMiniCanvases();
+}
+
+// ── Topology Detail View ───────────────────────────────────────
+let _viewIdx=0,_viewOpen=false,_viewScene=null;
+
+function openTopologyView(id){
+  const idx=TOPOLOGIES.findIndex(t=>t.id===id);
+  if(idx<0)return;
+  _viewIdx=idx;
+  _renderView(idx);
+  const view=document.getElementById('topoView');
+  view.classList.add('open');view.setAttribute('aria-hidden','false');
+  view.scrollTo({top:0,behavior:'instant'});
+  document.body.style.overflow='hidden';
+  _viewOpen=true;
+  requestAnimationFrame(()=>{if(_viewIdx!==idx)return;_startViewScene(TOPOLOGIES[idx]);_animBars()});
+}
+
+function closeView(){
+  if(_viewScene){_viewScene.destroy();_viewScene=null}
+  const view=document.getElementById('topoView');
+  view.classList.remove('open');view.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  _viewOpen=false;
+  setTimeout(()=>{const inner=document.getElementById('viewInner');if(inner)inner.innerHTML=''},420);
+}
+
+function navigateView(dir){
+  if(_viewScene){_viewScene.destroy();_viewScene=null}
+  _viewIdx=(_viewIdx+dir+TOPOLOGIES.length)%TOPOLOGIES.length;
+  document.getElementById('topoView')?.scrollTo({top:0,behavior:'instant'});
+  _renderView(_viewIdx);
+  const _snap=_viewIdx;
+  requestAnimationFrame(()=>{if(_viewIdx!==_snap)return;_startViewScene(TOPOLOGIES[_snap]);_animBars()});
+}
+
+function _startViewScene(data){
+  if(_viewScene){_viewScene.destroy();_viewScene=null}
+  const canvas=document.getElementById('view3DCanvas');
+  if(!canvas)return;
+  _viewScene=new ViewScene3D(canvas,data.miniType,data.accentColor,data.accentColor2);
+}
+
+function _animBars(){
+  document.querySelectorAll('.vstat-bar').forEach((bar,i)=>{
+    const score=parseInt(bar.dataset.score)||0;
+    bar.style.width='0%';
+    setTimeout(()=>{bar.style.transition='width .7s cubic-bezier(.4,0,.2,1)';bar.style.width=(score/5*100)+'%'},50+i*70);
+  });
+}
+
+function _renderView(idx){
+  const d=TOPOLOGIES[idx];
+  const titleEl=document.getElementById('viewTitle');
+  const counterEl=document.getElementById('viewCounter');
+  const glowEl=document.getElementById('view3DGlow');
+  const innerEl=document.getElementById('viewInner');
+  if(titleEl)titleEl.textContent=`Topología ${d.id.charAt(0).toUpperCase()+d.id.slice(1)}`;
+  if(counterEl)counterEl.textContent=`${idx+1} / ${TOPOLOGIES.length}`;
+  if(glowEl)glowEl.style.background=`radial-gradient(ellipse at 50% 100%,${d.accentColor}28 0%,transparent 65%)`;
+  if(!innerEl)return;
+  const prev=TOPOLOGIES[(idx-1+TOPOLOGIES.length)%TOPOLOGIES.length];
+  const next=TOPOLOGIES[(idx+1)%TOPOLOGIES.length];
+  const spofC=d.spof?'#FF5E5B':'#00E5FF';
+  const spofL=d.spof?'CON SPOF':'SIN SPOF';
+  const redMap={alta:'#00E5FF',baja:'#FF5E5B',nula:'#FF5E5B',media:'#FF7A00',variable:'#FF7A00'};
+  const redC=redMap[d.redundancyLevel]||'#FF7A00';
+  const sLabels=['Costo','Escalabilidad','Rendimiento','T.Fallos','Facilidad'];
+  const sKeys=['cost','scalability','performance','faultTolerance','ease'];
+  const statsH=sKeys.map((k,i)=>`<div class="vstat"><span class="vstat-lbl">${sLabels[i]}</span><div class="vstat-track"><div class="vstat-bar" data-score="${d.stats[k]}" style="--bc:${d.accentColor}"></div></div><span class="vstat-val">${d.stats[k]}/5</span></div>`).join('');
+  const proH=d.advantages.map(a=>`<div class="v-pro-card"><div class="v-card-icon" style="color:${d.accentColor}"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div><div><strong>${a.title}</strong><p>${a.desc}</p></div></div>`).join('');
+  const conH=d.disadvantages.map(a=>`<div class="v-con-card"><div class="v-card-icon v-con-ico"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg></div><div><strong>${a.title}</strong><p>${a.desc}</p></div></div>`).join('');
+  const appH=d.applications.map(a=>`<span class="v-app-tag" style="border-color:${d.accentColor}55;color:${d.accentColor}">${a}</span>`).join('');
+  const stdH=d.standards.map(s=>`<span class="v-std-tag">${s}</span>`).join('');
+  const dotsH=TOPOLOGIES.map((_,i)=>`<span class="vnav-dot${i===idx?' active':''}" ${i===idx?`style="background:${d.accentColor};box-shadow:0 0 6px ${d.accentColor}"`:''} ></span>`).join('');
+  innerEl.innerHTML=`
+<div class="view-identity">
+  <div class="v-badges">
+    <span class="v-badge" style="color:${d.accentColor};border-color:${d.accentColor}55">${d.num}</span>
+    <span class="v-badge" style="color:${spofC};border-color:${spofC}55;background:${spofC}14">${spofL}</span>
+    <span class="v-badge" style="color:${redC};border-color:${redC}55;background:${redC}14">REDUNDANCIA: ${d.redundancyLevel.toUpperCase()}</span>
+  </div>
+  <h2 class="view-name" style="background:linear-gradient(90deg,${d.accentColor},${d.accentColor2});-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Topología ${d.id.charAt(0).toUpperCase()+d.id.slice(1)}</h2>
+  <p class="view-tagline">${d.tagline}</p>
+</div>
+<div class="view-body">
+  <aside class="view-aside">
+    <div class="v-card"><h3 class="v-card-title">Métricas</h3><p class="v-stats-note">5 = mejor en cada categoría</p><div class="v-stats-list">${statsH}</div></div>
+    <div class="v-card v-qfacts-card">
+      <div class="v-qfact" style="--qc:${spofC}"><div class="v-qfact-head"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>SPOF</div><p class="v-qfact-val" style="color:${spofC}">${spofL}</p><p class="v-qfact-desc">${d.spofDesc}</p></div>
+      <div class="v-qfact" style="--qc:${redC}"><div class="v-qfact-head"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>REDUNDANCIA</div><p class="v-qfact-val" style="color:${redC}">${d.redundancyLevel.toUpperCase()}</p><p class="v-qfact-desc">${d.redundancyNote}</p></div>
+      <div class="v-qfact" style="--qc:${d.accentColor2}"><div class="v-qfact-head"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>CABLEADO</div><p class="v-qfact-val" style="color:${d.accentColor2}">${d.cableFormula}</p><p class="v-qfact-desc">${d.cableNote}</p></div>
+      <div class="v-qfact" style="--qc:${d.accentColor}"><div class="v-qfact-head"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>TIPO DE FALLO</div><p class="v-qfact-val" style="color:${d.accentColor}">${d.failureType.toUpperCase()}</p><p class="v-qfact-desc">${d.failureNote}</p></div>
+    </div>
+  </aside>
+  <div class="view-text">
+    <div class="v-section"><h3 class="v-sec-title" style="--mc:${d.accentColor}">Definición</h3><p class="v-sec-p">${d.definition}</p></div>
+    <div class="v-section"><h3 class="v-sec-title" style="--mc:${d.accentColor2}">Estructura</h3><p class="v-sec-p">${d.structure}</p></div>
+    <div class="v-section"><h3 class="v-sec-title" style="--mc:${d.accentColor}">Funcionamiento</h3><p class="v-sec-p">${d.howItWorks}</p></div>
+    <div class="v-section"><div class="v-two-col"><div><h3 class="v-sec-title" style="--mc:${d.accentColor}">Ventajas</h3><div class="v-pro-list">${proH}</div></div><div><h3 class="v-sec-title" style="--mc:#FF5E5B">Desventajas</h3><div class="v-con-list">${conH}</div></div></div></div>
+    <div class="v-section"><h3 class="v-sec-title" style="--mc:${d.accentColor2}">Estándares y Protocolos</h3><div class="v-std-tags">${stdH}</div></div>
+    <div class="v-section"><h3 class="v-sec-title" style="--mc:${d.accentColor2}">Aplicaciones</h3><div class="v-app-tags">${appH}</div></div>
+    <div class="v-section v-example-box" style="border-color:${d.accentColor}33;background:${d.accentColor}08"><div class="v-ex-label" style="color:${d.accentColor}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Ejemplo Real</div><p class="v-sec-p">${d.realExample}</p></div>
+  </div>
+</div>
+<div class="view-bottom-nav">
+  <button class="vbnav-btn" id="viewPrev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span>${prev.id.charAt(0).toUpperCase()+prev.id.slice(1)}</span></button>
+  <div class="vbnav-dots">${dotsH}</div>
+  <button class="vbnav-btn" id="viewNext"><span>${next.id.charAt(0).toUpperCase()+next.id.slice(1)}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+</div>`;
+  innerEl.querySelector('#viewPrev')?.addEventListener('click',()=>navigateView(-1));
+  innerEl.querySelector('#viewNext')?.addEventListener('click',()=>navigateView(1));
+}
+
+// ── 3D View Scene (Canvas 2D simulation) ──────────────────────
+class ViewScene3D {
+  constructor(canvas,type,c1,c2){
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');
+    this.type=type;this.c1=c1;this.c2=c2;
+    this.nodes=[];this.edges=[];this.packets=[];
+    this.angle=0;this.tiltAngle=0;this.raf=null;
+    this.zoom=1.0;
+    this.mouse={x:-9999,y:-9999};this.dragging=false;this.lastMouse={x:0,y:0};
+    this._hoveredNode=-1;this._lastProjected=[];
+    this._resize();this._build();this._bindEvents();this._animate();
+  }
+  _resize(){
+    const p=this.canvas.parentElement;
+    const W=Math.max(1,p?p.clientWidth:800);
+    const H=Math.max(1,p?p.clientHeight:480);
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    this.canvas.width=W*dpr;this.canvas.height=H*dpr;
+    this.ctx.scale(dpr,dpr);
+    this.W=W;this.H=H;
+  }
+  _build(){
+    const builders={
+      star:()=>{
+        const hub={x:0,y:0,z:0,label:'Hub Central',r:.4,color:this.c2};
+        const n=8,R=3;
+        const arms=Array.from({length:n},(_,i)=>{
+          const a=(i/n)*Math.PI*2;
+          return{x:R*Math.cos(a),y:Math.sin(a*1.3)*.6,z:R*Math.sin(a),label:`Nodo ${i+1}`,r:.22,color:this.c1};
+        });
+        this.nodes=[hub,...arms];
+        arms.forEach((_,i)=>this.edges.push([0,i+1]));
+      },
+      bus:()=>{
+        // Backbone: terminators at ends + junction tap points; devices hang via stubs
+        const T1={x:-5,y:0,z:0,label:'Terminador A',r:.22,color:'#FF4D8D',busType:'terminator'};
+        const T2={x:5,y:0,z:0,label:'Terminador B',r:.22,color:'#FF4D8D',busType:'terminator'};
+        const jx=[-3,-1.5,0,1.5,3];
+        const junctions=jx.map((x,i)=>({x,y:0,z:0,label:`Conector ${i+1}`,r:.14,color:this.c1,busType:'junction'}));
+        const devices=jx.map((x,i)=>({x,y:i%2===0?2.5:-2.5,z:0,label:`Dispositivo ${i+1}`,r:.25,color:this.c2,busType:'device'}));
+        // T1=0, J0-J4=1-5, T2=6, D0-D4=7-11
+        this.nodes=[T1,...junctions,T2,...devices];
+        this.edges=[[0,1,'backbone'],[1,2,'backbone'],[2,3,'backbone'],[3,4,'backbone'],[4,5,'backbone'],[5,6,'backbone']];
+        jx.forEach((_,i)=>this.edges.push([i+1,i+7,'stub']));
+      },
+      ring:()=>{
+        const n=9,R=3.2;
+        this.nodes=Array.from({length:n},(_,i)=>{
+          const a=(i/n)*Math.PI*2;
+          return{x:R*Math.cos(a),y:Math.sin(a*2)*.45,z:R*Math.sin(a),label:`Nodo ${i+1}`,r:.24,color:this.c1};
+        });
+        this.nodes.forEach((_,i)=>this.edges.push([i,(i+1)%n]));
+      },
+      tree:()=>{
+        this.nodes=[
+          {x:0,y:3.5,z:0,label:'Core',r:.4,color:this.c2},
+          {x:-3.5,y:1,z:0,label:'Distribución 1',r:.3,color:this.c1},
+          {x:3.5,y:1,z:0,label:'Distribución 2',r:.3,color:this.c1},
+          {x:-5.5,y:-1.5,z:-.5,label:'Acceso 1',r:.2,color:'#00E5FF'},
+          {x:-2.5,y:-1.5,z:-.5,label:'Acceso 2',r:.2,color:'#00E5FF'},
+          {x:2.5,y:-1.5,z:-.5,label:'Acceso 3',r:.2,color:'#00E5FF'},
+          {x:5.5,y:-1.5,z:-.5,label:'Acceso 4',r:.2,color:'#00E5FF'},
+        ];
+        this.edges=[[0,1],[0,2],[1,3],[1,4],[2,5],[2,6]];
+      },
+      mesh:()=>{
+        const n=7,R=3;
+        this.nodes=Array.from({length:n},(_,i)=>{
+          const a=(i/n)*Math.PI*2;
+          const r=R+(Math.random()-.5)*.5;
+          return{x:r*Math.cos(a),y:(Math.random()-.5)*2,z:r*Math.sin(a),label:`Nodo ${i+1}`,r:.26,color:this.c1};
+        });
+        for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)this.edges.push([i,j]);
+      },
+      hybrid:()=>{
+        const h1={x:-2.5,y:0,z:-1.5,label:'Hub A',r:.35,color:this.c1};
+        const h2={x:2.5,y:0,z:-1.5,label:'Hub B',r:.35,color:this.c1};
+        const h3={x:0,y:0,z:2.2,label:'Hub C',r:.35,color:this.c1};
+        const leaves=[
+          {x:-5.2,y:1.8,z:-2.5,label:'Nodo 1',r:.19,color:this.c2},
+          {x:-5.5,y:-.8,z:-2.5,label:'Nodo 2',r:.19,color:this.c2},
+          {x:5.2,y:1.8,z:-2.5,label:'Nodo 3',r:.19,color:this.c2},
+          {x:5.5,y:-.8,z:-2.5,label:'Nodo 4',r:.19,color:this.c2},
+          {x:0,y:2.8,z:4.5,label:'Nodo 5',r:.19,color:this.c2},
+          {x:-2.2,y:.8,z:4.8,label:'Nodo 6',r:.19,color:this.c2},
+        ];
+        this.nodes=[h1,h2,h3,...leaves];
+        this.edges=[[0,1],[1,2],[0,2],[0,3],[0,4],[1,5],[1,6],[2,7],[2,8]];
+      },
+    };
+    if(builders[this.type])builders[this.type]();
+    // Packets on non-backbone edges only
+    this.edges.forEach(e=>{
+      if(e[2]==='backbone')return;
+      this.packets.push({edge:[e[0],e[1]],t:Math.random(),speed:.004+Math.random()*.003});
+    });
+  }
+  _project(x,y,z){
+    const cosA=Math.cos(this.angle),sinA=Math.sin(this.angle);
+    const rx=x*cosA-z*sinA,rz=x*sinA+z*cosA;
+    const cosT=Math.cos(this.tiltAngle),sinT=Math.sin(this.tiltAngle);
+    const ry=y*cosT-rz*sinT,rz2=y*sinT+rz*cosT;
+    const _d=6+rz2;
+    if(Math.abs(_d)<0.05)return{x:-9999,y:-9999,z:rz2,fov:0};
+    const fov=6/_d;
+    if(fov<=0)return{x:-9999,y:-9999,z:rz2,fov:0};
+    const scale=Math.min(this.W,this.H)*.08*this.zoom;
+    return{x:this.W/2+rx*scale*fov,y:this.H/2-ry*scale*fov,z:rz2,fov};
+  }
+  _bindEvents(){
+    const c=this.canvas;
+    const isTouch='ontouchstart' in window||navigator.maxTouchPoints>0;
+    if(isTouch){
+      c.style.touchAction='none';
+      let lastT=null,lastPinch=null;
+      c.addEventListener('touchstart',e=>{
+        if(e.touches.length===2){
+          const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
+          lastPinch=Math.hypot(dx,dy);lastT=null;
+        } else {lastT={x:e.touches[0].clientX,y:e.touches[0].clientY};lastPinch=null;}
+        e.preventDefault();
+      },{passive:false});
+      c.addEventListener('touchmove',e=>{
+        if(e.touches.length===2&&lastPinch!==null){
+          const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
+          const d=Math.hypot(dx,dy);
+          this.zoom=Math.max(0.4,Math.min(3.0,this.zoom*(d/lastPinch)));lastPinch=d;
+        } else if(e.touches.length===1&&lastT){
+          const dx=e.touches[0].clientX-lastT.x,dy=e.touches[0].clientY-lastT.y;
+          this.angle+=dx*.008;this.tiltAngle+=dy*.008;
+          this.tiltAngle=Math.max(-1,Math.min(1,this.tiltAngle));
+          lastT={x:e.touches[0].clientX,y:e.touches[0].clientY};
+        }
+        e.preventDefault();
+      },{passive:false});
+    } else {
+      c.addEventListener('mousedown',e=>{this.dragging=true;this.lastMouse={x:e.clientX,y:e.clientY}});
+      this._onMouseMove=e=>{
+        if(!this.dragging)return;
+        this.angle+=(e.clientX-this.lastMouse.x)*.008;
+        this.tiltAngle+=(e.clientY-this.lastMouse.y)*.008;
+        this.tiltAngle=Math.max(-1,Math.min(1,this.tiltAngle));
+        this.lastMouse={x:e.clientX,y:e.clientY};
+      };
+      this._onMouseUp=()=>{this.dragging=false};
+      window.addEventListener('mousemove',this._onMouseMove,{passive:true});
+      window.addEventListener('mouseup',this._onMouseUp,{passive:true});
+      // Scroll to zoom
+      c.addEventListener('wheel',e=>{
+        e.preventDefault();
+        this.zoom=Math.max(0.4,Math.min(3.0,this.zoom*(e.deltaY>0?0.92:1.09)));
+      },{passive:false});
+      // Node hover
+      this._onCanvasMouseMove=e=>{
+        if(this.dragging)return;
+        const rect=c.getBoundingClientRect();
+        const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+        let hit=-1;
+        for(let i=0;i<this._lastProjected.length;i++){
+          const p=this._lastProjected[i];
+          if(!p||p.fov<=0||p.node.busType==='junction')continue;
+          const r=Math.max(8,p.node.r*p.fov*Math.min(this.W,this.H)*.06*2.5);
+          const dx=mx-p.x,dy=my-p.y;
+          if(dx*dx+dy*dy<r*r){hit=i;break;}
+        }
+        this._hoveredNode=hit;
+        c.style.cursor=hit>=0?'pointer':'';
+        if(hit>=0){const p=this._lastProjected[hit];this._showTooltip(p.node.label,e.clientX,e.clientY);}
+        else this._hideTooltip();
+      };
+      this._onCanvasClick=e=>{
+        if(this._hoveredNode>=0){const p=this._lastProjected[this._hoveredNode];this._showTooltip(p.node.label,e.clientX,e.clientY);}
+      };
+      c.addEventListener('mousemove',this._onCanvasMouseMove,{passive:true});
+      c.addEventListener('click',this._onCanvasClick,{passive:true});
+    }
+    this._ro=new ResizeObserver(()=>this._resize());
+    if(c.parentElement)this._ro.observe(c.parentElement);
+  }
+  _showTooltip(label,cx,cy){
+    const el=document.getElementById('node-tooltip');
+    if(!el)return;
+    el.textContent=label;el.style.opacity='1';
+    const pad=14,w=el.offsetWidth||120,h=el.offsetHeight||28;
+    let x=cx+pad,y=cy-h-pad;
+    if(x+w>window.innerWidth)x=cx-w-pad;
+    if(y<0)y=cy+pad;
+    el.style.left=x+'px';el.style.top=y+'px';
+  }
+  _hideTooltip(){
+    const el=document.getElementById('node-tooltip');
+    if(el)el.style.opacity='0';
+  }
+  _animate(){
+    if(this._destroyed)return;
+    this.raf=requestAnimationFrame(()=>this._animate());
+    if(!this.dragging)this.angle+=.004;
+    const ctx=this.ctx;
+    ctx.clearRect(0,0,this.W,this.H);
+    // Background stars
+    if(!this._stars){
+      this._stars=Array.from({length:120},()=>({x:(Math.random()-.5)*200,y:(Math.random()-.5)*200,z:(Math.random()-.5)*200}));
+    }
+    this._stars.forEach(s=>{
+      const p=this._project(s.x*.05,s.y*.05,s.z*.05);
+      if(p.fov<=0)return;
+      const sr=p.fov*.5;
+      if(!isFinite(sr)||sr<=0)return;
+      ctx.beginPath();ctx.arc(p.x,p.y,sr,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${Math.min(1,p.fov*.4)})`;ctx.fill();
+    });
+    // Project nodes
+    const projected=this.nodes.map((n,i)=>{const p=this._project(n.x,n.y,n.z);return{...p,node:n,origIdx:i}});
+    this._lastProjected=projected;
+    const sortedNodes=[...projected].sort((a,b)=>a.z-b.z);
+    // Draw edges
+    this.edges.forEach(e=>{
+      const [ai,bi,etype]=[e[0],e[1],e[2]||'wire'];
+      const a=projected[ai],b=projected[bi];
+      if(!a||!b||a.fov<=0||b.fov<=0)return;
+      const avgFov=(a.fov+b.fov)/2;
+      const isBackbone=etype==='backbone';
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle=`rgba(${hexToRgb(this.c1)},${Math.min(0.95,isBackbone?0.88*avgFov:0.75*avgFov)})`;
+      ctx.lineWidth=isBackbone?Math.max(2,2.8*avgFov):Math.max(0.8,1.6*avgFov);
+      if(isBackbone){ctx.shadowBlur=5;ctx.shadowColor=this.c1;}
+      ctx.stroke();ctx.shadowBlur=0;
+    });
+    // Animate packets
+    this.packets.forEach(pkt=>{
+      pkt.t+=pkt.speed;if(pkt.t>1)pkt.t=0;
+      const [ai,bi]=pkt.edge;
+      const a=projected[ai],b=projected[bi];
+      if(!a||!b||a.fov<=0||b.fov<=0)return;
+      const px=a.x+(b.x-a.x)*pkt.t,py=a.y+(b.y-a.y)*pkt.t;
+      const pr=Math.max(.1,2.5*a.fov);
+      ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,.9)`;ctx.shadowBlur=6;ctx.shadowColor=this.c1;ctx.fill();ctx.shadowBlur=0;
+    });
+    // Draw nodes
+    sortedNodes.forEach(({x,y,z,fov,node,origIdx})=>{
+      if(fov<=0)return;
+      const isJunction=node.busType==='junction';
+      const isHovered=this._hoveredNode===origIdx;
+      const r=Math.max(.5,node.r*fov*Math.min(this.W,this.H)*.06);
+      if(!isFinite(r))return;
+      const alpha=Math.max(.35,(z+3)/6);
+      if(isJunction){
+        ctx.beginPath();ctx.arc(x,y,Math.max(.4,r*.7),0,Math.PI*2);
+        ctx.fillStyle=`rgba(${hexToRgb(node.color)},${alpha*.9})`;
+        ctx.shadowBlur=r*4;ctx.shadowColor=node.color;ctx.fill();ctx.shadowBlur=0;
+        return;
+      }
+      // Halo
+      ctx.beginPath();ctx.arc(x,y,r*(isHovered?3.8:2.5),0,Math.PI*2);
+      ctx.fillStyle=`rgba(${hexToRgb(node.color)},${isHovered?.14:.07})`;ctx.fill();
+      if(isHovered){
+        ctx.beginPath();ctx.arc(x,y,r*1.7,0,Math.PI*2);
+        ctx.strokeStyle=`rgba(${hexToRgb(node.color)},.85)`;ctx.lineWidth=1.5;ctx.stroke();
+      }
+      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${hexToRgb(node.color)},${alpha})`;
+      ctx.shadowBlur=r*(isHovered?5:3);ctx.shadowColor=node.color;ctx.fill();ctx.shadowBlur=0;
+    });
+  }
+  destroy(){
+    this._destroyed=true;
+    if(this.raf)cancelAnimationFrame(this.raf);
+    if(this._ro)this._ro.disconnect();
+    if(this._onMouseMove)window.removeEventListener('mousemove',this._onMouseMove);
+    if(this._onMouseUp)window.removeEventListener('mouseup',this._onMouseUp);
+    if(this._onCanvasMouseMove)this.canvas.removeEventListener('mousemove',this._onCanvasMouseMove);
+    if(this._onCanvasClick)this.canvas.removeEventListener('click',this._onCanvasClick);
+    this._hideTooltip();
+  }
+}
+
+// ── Navbar ─────────────────────────────────────────────────────
+function initNavbar(){
+  const nav=document.getElementById('navbar');
+  const hamburger=document.getElementById('hamburger');
+  const navMenu=document.getElementById('navMenu');
+  window.addEventListener('scroll',()=>{
+    nav.classList.toggle('scrolled',window.scrollY>40);
+  },{passive:true});
+  hamburger.addEventListener('click',()=>{
+    const open=hamburger.classList.toggle('active');
+    navMenu.classList.toggle('open',open);
+    hamburger.setAttribute('aria-expanded',open.toString());
+  });
+  navMenu.querySelectorAll('.nav-link').forEach(link=>{
+    link.addEventListener('click',()=>{
+      hamburger.classList.remove('active');navMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded','false');
+    });
+  });
+  document.getElementById('navLogo')?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+}
+
+// ── Button wiring ──────────────────────────────────────────────
+function initButtons(){
+  document.getElementById('btnExplore')?.addEventListener('click',()=>document.getElementById('topologies')?.scrollIntoView({behavior:'smooth'}));
+  document.getElementById('btnCompare')?.addEventListener('click',()=>document.getElementById('comparative')?.scrollIntoView({behavior:'smooth'}));
+  document.getElementById('navCta')?.addEventListener('click',()=>document.getElementById('topologies')?.scrollIntoView({behavior:'smooth'}));
+  document.getElementById('btnCtaExplore')?.addEventListener('click',()=>document.getElementById('topologies')?.scrollIntoView({behavior:'smooth'}));
+  document.getElementById('viewBack')?.addEventListener('click',closeView);
+  document.getElementById('viewPrevTop')?.addEventListener('click',()=>navigateView(-1));
+  document.getElementById('viewNextTop')?.addEventListener('click',()=>navigateView(1));
+  document.addEventListener('keydown',e=>{
+    if(!_viewOpen)return;
+    if(e.key==='Escape')closeView();
+    if(e.key==='ArrowRight')navigateView(1);
+    if(e.key==='ArrowLeft')navigateView(-1);
+  });
+}
+
+// ── Scroll animations (intersection observer) ──────────────────
+function initScrollAnimations(){
+  if(!('IntersectionObserver' in window))return;
+  const style=document.createElement('style');
+  style.textContent=`.reveal{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}.reveal.visible{opacity:1;transform:none}`;
+  document.head.appendChild(style);
+  const targets=document.querySelectorAll('.topo-card,.feat-card,.app-card,.knowledge-card,.chooser-card,.info-box');
+  targets.forEach((el,i)=>{el.classList.add('reveal');el.style.transitionDelay=(i%6)*.07+'s'});
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+  },{threshold:.08});
+  targets.forEach(el=>obs.observe(el));
+}
+
+// ── Boot ───────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  // tsParticles — Reactive Topology Network
+  if(typeof tsParticles!=='undefined'){
+    tsParticles.load('tsparticles',TS_CONFIG);
+  }
+  // Hero sphere
+  const hCanvas=document.getElementById('heroCanvas3D');
+  if(hCanvas)initHeroSphere(hCanvas);
+  // Build sections
+  buildTopoGrid();
+  buildCompareTable();
+  buildChooser();
+  // Init canvases
+  initIntroCanvas();
+  initRedundancyCanvas();
+  // UI
+  initNavbar();
+  initButtons();
+  initScrollAnimations();
+});
+</script>
+</body>
+</html>
